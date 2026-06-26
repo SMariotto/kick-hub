@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gregório de Matos - Boca do Inferno | Kick Hub</title>
+  <meta name="description" content="Trabalho de Português sobre Gregório de Matos, Barroco, cultismo, conceptismo e quiz.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,800;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="../index.html" class="back-to-hub">← Voltar ao Hub</a>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="gm-main">
+    <section class="gm-hero">
+      <div class="hero-ornament hero-ornament--top" aria-hidden="true">❦</div>
+      <p class="gm-eyebrow reveal">Português · Literatura Barroca · 1º INFO B</p>
+      <h1 class="gm-title reveal">Gregório de Matos</h1>
+      <p class="gm-subtitle reveal">a Boca do Inferno</p>
+      <div class="hero-divider reveal" aria-hidden="true"><span></span>✦<span></span></div>
+      <p class="gm-intro reveal">Poeta baiano do século XVII, dividido entre pecado e perdão, sátira e fé. Sua obra representa conflitos centrais do Barroco na língua portuguesa.</p>
+    </section>
+
+    <section class="gm-section">
+      <h2 class="gm-section-title reveal"><span class="title-flourish">✦</span> O Poeta <span class="title-flourish">✦</span></h2>
+      <div class="gm-cards">
+        <div class="gm-card reveal"><span class="gm-card-icon">🪶</span><h3>Nome completo</h3><p>Gregório de Matos e Guerra.</p></div>
+        <div class="gm-card reveal"><span class="gm-card-icon">📍</span><h3>Origem</h3><p>Salvador, Bahia, 1636-1696.</p></div>
+        <div class="gm-card reveal"><span class="gm-card-icon">🎓</span><h3>Formação</h3><p>Estudou Direito em Coimbra, Portugal.</p></div>
+        <div class="gm-card reveal"><span class="gm-card-icon">🔥</span><h3>Apelido</h3><p>Boca do Inferno, por suas sátiras contra a sociedade colonial.</p></div>
+      </div>
+    </section>
+
+    <section class="gm-section gm-section--manuscript">
+      <div class="manuscript-frame">
+        <span class="corner corner-tl" aria-hidden="true"></span>
+        <span class="corner corner-tr" aria-hidden="true"></span>
+        <span class="corner corner-bl" aria-hidden="true"></span>
+        <span class="corner corner-br" aria-hidden="true"></span>
+        <h2 class="gm-section-title reveal"><span class="title-flourish">✦</span> O Barroco <span class="title-flourish">✦</span></h2>
+        <p class="gm-lead reveal">Um estilo construído sobre contraste: luz e sombra, corpo e alma, prazer e culpa.</p>
+        <p class="gm-paragraph reveal">A poesia de Gregório de Matos alterna versos sacros, que pedem perdão a Deus, e versos profanos, que criticam costumes e autoridades. Esse conflito constante é uma marca do Barroco.</p>
+        <div class="gm-cards gm-cards--two">
+          <div class="gm-card gm-card--gold reveal"><span class="gm-card-tag">Cultismo</span><p>Jogo de palavras, metáforas, inversões e linguagem rebuscada.</p></div>
+          <div class="gm-card gm-card--gold reveal"><span class="gm-card-tag">Conceptismo</span><p>Jogo de ideias, raciocínio lógico e argumentação elaborada.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gm-section gm-quiz-section">
+      <div class="hero-ornament" aria-hidden="true">❦</div>
+      <h2 class="gm-section-title reveal"><span class="title-flourish">✦</span> Teste seu Conhecimento <span class="title-flourish">✦</span></h2>
+      <p class="gm-lead reveal">Cinco perguntas rápidas sobre Gregório de Matos e o Barroco.</p>
+      <button class="gm-quiz-btn reveal" id="btn-quiz" type="button"><span class="quill-icon-sm">🪶</span> Iniciar quiz</button>
+    </section>
+  </main>
+
+  <footer class="gm-footer">
+    <p>1º INFO B · Projeto Escolar de Português</p>
+  </footer>
+
+  <dialog id="quiz-modal" class="quiz-modal">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge">Quiz · Gregório de Matos</span>
+          <h3 class="modal-title">Barroco em foco</h3>
+        </div>
+        <button class="modal-close" id="btn-close-quiz" type="button" aria-label="Fechar">✕</button>
+      </div>
+      <div class="quiz-progress">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <span class="progress-label" id="progress-label">Pergunta 1 de 5</span>
+      </div>
+      <div class="quiz-stage" id="quiz-stage">
+        <span class="quiz-q-label">Pergunta</span>
+        <p class="quiz-question" id="quiz-question"></p>
+        <div class="quiz-answer-wrap" id="quiz-answer-wrap" hidden>
+          <span class="quiz-a-label">Resposta</span>
+          <p class="quiz-answer" id="quiz-answer"></p>
+        </div>
+      </div>
+      <div class="quiz-controls">
+        <button class="qbtn qbtn--reveal" id="btn-reveal" type="button">Revelar resposta</button>
+        <button class="qbtn qbtn--next" id="btn-next" type="button" disabled>Próxima →</button>
+      </div>
+      <div class="quiz-end" id="quiz-end" hidden>
+        <span class="end-emoji">🪶</span>
+        <h3>Quiz concluído!</h3>
+        <p>Você passou pelas cinco perguntas sobre o Barroco e Gregório de Matos.</p>
+        <button class="qbtn qbtn--next" id="btn-restart" type="button">Refazer quiz</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Dependências
+node_modules/
+
+# Arquivos aposentados na refatoração (mantidos só como backup local)
+*.bak
+
+# Projeto nativo gerado pelo Capacitor (Fase 3)
+/android/
+/ios/
+
+# Segredos / ambiente — NUNCA versionar chaves
+.env
+.env.*
+kick-hub/kickhub.config.local.js
+
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build/preview temporários
+.netlify/
+dist/

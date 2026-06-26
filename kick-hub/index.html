@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#eceded">
+  <title>Kick Hub</title>
+  <meta name="description" content="Hub escolar modular no estilo Nintendo Switch.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!--
+    Shell mínimo. O Core (core.js) preenche header e footer dinamicamente
+    e renderiza os apps dentro de <main id="kh-app">. Nada aqui conhece
+    nenhum app específico.
+  -->
+  <header class="kh-topbar" id="kh-topbar"></header>
+
+  <main class="kh-app" id="kh-app"></main>
+
+  <footer class="kh-footer" id="kh-footer"></footer>
+
+  <div class="kh-modal-root" id="kh-modal-root"></div>
+
+  <!-- 1) Infra: lib do Supabase (vendorada) + suas chaves. -->
+  <script src="vendor/supabase.js"></script>
+  <script src="kickhub.config.js"></script>
+
+  <!-- 2) O Core, depois a camada de dados e a autenticação. -->
+  <script src="core.js"></script>
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+
+  <!--
+    3) Os plugins. Cada um se auto-registra via KickHub.registerApp(...).
+       Removeu o <script> de um app? Ele some do hub e nada quebra.
+  -->
+  <script src="app-resumos.js"></script>
+  <script src="app-trabalhos.js"></script>
+  <script src="app-calendario.js"></script>
+  <script src="app-escola.js"></script>
+</body>
+</html>

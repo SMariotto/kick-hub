@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manu Chao - Me Gustas Tu | Kick Hub</title>
+  <meta name="description" content="Trabajo de español sobre Manu Chao, Me Gustas Tu, vocabulario y el verbo gustar.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@500;700&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="../index.html" class="back-to-hub" aria-label="Volver al hub">← Hub</a>
+
+  <div class="bg-parallax" aria-hidden="true">
+    <div class="cloud-layer cloud-layer--back"></div>
+    <div class="cloud-layer cloud-layer--front"></div>
+    <div class="map-route"><span class="map-plane">✈</span></div>
+  </div>
+
+  <nav class="dot-nav" aria-label="Navegación de secciones">
+    <button class="dot" type="button" data-target="hero" aria-label="Ir a portada"></button>
+    <button class="dot" type="button" data-target="artista" aria-label="Ir al artista"></button>
+    <button class="dot" type="button" data-target="album" aria-label="Ir al álbum"></button>
+    <button class="dot" type="button" data-target="cancion" aria-label="Ir a la canción"></button>
+    <button class="dot" type="button" data-target="timeline" aria-label="Ir a la trayectoria"></button>
+    <button class="dot" type="button" data-target="gramatica" aria-label="Ir a gramática"></button>
+    <button class="dot" type="button" data-target="vocabulario" aria-label="Ir a vocabulario"></button>
+  </nav>
+
+  <div class="scroll-arrows">
+    <button id="btn-up" type="button" aria-label="Sección anterior">▲</button>
+    <button id="btn-down" type="button" aria-label="Sección siguiente">▼</button>
+  </div>
+
+  <main class="slides">
+    <section id="hero" class="slide slide-hero">
+      <span class="stamp" aria-hidden="true">VÍA AÉREA<br>✈ ESPAÑOL ✈</span>
+      <div class="hero-content">
+        <p class="eyebrow reveal">Proyecto de Español - 1º INFO B</p>
+        <h1 class="hero-title reveal">Música en Español:<br><span class="highlight">Manu Chao</span><br>Me Gustas Tu</h1>
+        <p class="typing-line"><span id="typing-target"></span><span class="typing-cursor" aria-hidden="true">|</span></p>
+        <div class="scroll-hint reveal" aria-hidden="true"><span>Desliza para viajar</span><span class="plane">✈</span></div>
+      </div>
+    </section>
+
+    <section id="artista" class="slide slide-artista">
+      <h2 class="section-title reveal">El Artista</h2>
+      <p class="section-lead reveal">Un músico franco-español que mezcla reggae, ska, rock y sonidos del mundo.</p>
+      <div class="cards-grid">
+        <div class="card postcard photo-card reveal">
+          <div class="photo-frame">
+            <img src="../assets/manu-chao-perfil.jpg" alt="Manu Chao" onerror="this.style.display='none'; this.parentElement.classList.add('asset-missing');">
+            <span class="img-fallback-label">Foto de Manu Chao<small>assets/manu-chao-perfil.jpg</small></span>
+          </div>
+        </div>
+        <div class="card postcard reveal"><span class="card-icon">🎤</span><h3>Nombre real</h3><p>José-Manuel Tomás Arturo Chao Ortega.</p></div>
+        <div class="card postcard reveal"><span class="card-icon">🌍</span><h3>Origen</h3><p>Nació en París, con raíces españolas y una identidad musical viajera.</p></div>
+        <div class="card postcard reveal"><span class="card-icon">🎸</span><h3>Estilo</h3><p>Sus canciones mezclan idiomas, ritmos populares y crítica social.</p></div>
+      </div>
+    </section>
+
+    <section id="album" class="slide slide-album">
+      <h2 class="section-title reveal">El Álbum y el Impacto</h2>
+      <div class="album-layout">
+        <div class="album-frame reveal">
+          <img src="../assets/capa-album.jpg" alt="Portada del álbum Próxima Estación: Esperanza" onerror="this.style.display='none'; this.parentElement.classList.add('asset-missing');">
+          <span class="img-fallback-label">Portada del álbum<small>assets/capa-album.jpg</small></span>
+        </div>
+        <div class="album-text reveal">
+          <p class="album-quote">Próxima Estación: Esperanza (2001)</p>
+          <p>El álbum combina radio, grabaciones de calle y varios idiomas. La canción Me Gustas Tu se volvió una de las más conocidas de Manu Chao.</p>
+          <p>Su fuerza está en la repetición simple: cosas cotidianas, viajes, amor y memoria aparecen como una lista musical fácil de cantar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cancion" class="slide slide-cancion">
+      <h2 class="section-title reveal">La Canción</h2>
+      <div class="radio-wrapper reveal">
+        <div class="radio-stage">
+          <div class="vinyl-record" id="vinyl-record" aria-hidden="true"><img src="../assets/disco-vinil.png" alt="" onerror="this.style.display='none';"></div>
+          <div class="vintage-radio" id="vintage-radio">
+            <div class="radio-antenna"></div>
+            <div class="radio-top">
+              <span class="radio-light" id="radio-light"></span>
+              <div class="radio-display">
+                <span class="display-label">SINTONIZANDO ÁLBUM</span>
+                <span class="display-text">Próxima Estación: Esperanza</span>
+              </div>
+            </div>
+            <div class="radio-body">
+              <div class="radio-speaker" aria-hidden="true"></div>
+              <div class="radio-controls">
+                <button class="knob" id="radio-knob" type="button" aria-label="Reproducir o pausar la canción"></button>
+                <div class="vu-meter" id="vu-meter" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <audio id="bg-audio" src="../assets/me-gustas-tu-audio.mp3" loop preload="none"></audio>
+        <p class="radio-caption">Pulsa el dial para escuchar.</p>
+      </div>
+      <p class="cancion-text reveal">La canción usa repetición para crear ritmo y memorizar vocabulario de forma natural.</p>
+    </section>
+
+    <section id="timeline" class="slide slide-timeline">
+      <h2 class="section-title reveal">Trayectoria</h2>
+      <p class="section-lead reveal">Una carrera marcada por movimiento, mezcla cultural y canciones populares.</p>
+      <div class="timeline">
+        <div class="timeline-line" aria-hidden="true"></div>
+        <div class="timeline-item reveal"><span class="timeline-dot"></span><span class="timeline-year">1987</span><p class="timeline-label">Funda Mano Negra.</p></div>
+        <div class="timeline-item reveal"><span class="timeline-dot"></span><span class="timeline-year">1998</span><p class="timeline-label">Lanza Clandestino.</p></div>
+        <div class="timeline-item reveal"><span class="timeline-dot"></span><span class="timeline-year">2001</span><p class="timeline-label">Publica Próxima Estación: Esperanza.</p></div>
+        <div class="timeline-item reveal"><span class="timeline-dot"></span><span class="timeline-year">2007</span><p class="timeline-label">Publica La Radiolina.</p></div>
+      </div>
+    </section>
+
+    <section id="gramatica" class="slide slide-gramatica">
+      <h2 class="section-title reveal">Análisis Gramatical</h2>
+      <p class="section-lead reveal">El verbo gustar concuerda con aquello que gusta, no con la persona que siente el gusto.</p>
+      <div class="formula-grid">
+        <div class="formula-card reveal"><span class="formula-tag">Fórmula 1</span><p class="formula-text">Me gusta + sustantivo singular</p><p class="formula-example">Me gusta la mañana.</p></div>
+        <div class="formula-card reveal"><span class="formula-tag">Fórmula 2</span><p class="formula-text">Me gustan + sustantivo plural</p><p class="formula-example">Me gustan las castañas.</p></div>
+      </div>
+      <p class="grammar-note reveal">También se usa con infinitivo: Me gusta soñar.</p>
+    </section>
+
+    <section id="vocabulario" class="slide slide-vocabulario">
+      <h2 class="section-title reveal">Vocabulario</h2>
+      <p class="section-lead reveal">Toque ou passe o mouse para revelar a tradução.</p>
+      <div class="flashcards">
+        <button class="flashcard reveal" type="button"><span class="flashcard-front">Castaña</span><span class="flashcard-back">Castanha</span></button>
+        <button class="flashcard reveal" type="button"><span class="flashcard-front">Soñar</span><span class="flashcard-back">Sonhar</span></button>
+        <button class="flashcard reveal" type="button"><span class="flashcard-front">Corazón</span><span class="flashcard-back">Coração</span></button>
+        <button class="flashcard reveal" type="button"><span class="flashcard-front">Viento</span><span class="flashcard-back">Vento</span></button>
+        <button class="flashcard reveal" type="button"><span class="flashcard-front">Lluvia</span><span class="flashcard-back">Chuva</span></button>
+        <button class="flashcard reveal" type="button"><span class="flashcard-front">Cena</span><span class="flashcard-back">Jantar</span></button>
+      </div>
+      <p class="conclusion-text reveal">Me gustas tu, me gusta todo.</p>
+    </section>
+  </main>
+
+  <div class="lyrics-marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-text">MANU CHAO · ME GUSTAS TU · UNA RADIO, UN MAPA, UNA CANCIÓN · </span>
+      <span class="marquee-text">MANU CHAO · ME GUSTAS TU · UNA RADIO, UN MAPA, UNA CANCIÓN · </span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
