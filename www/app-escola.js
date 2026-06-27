@@ -22,8 +22,9 @@
     theme: "red",
     order: 10,
     locked: true,
-    authRequired: true,      // exige LOGIN real (Supabase) quando configurado
-    password: "info2026",    // fallback offline (usado só se o Supabase não estiver configurado)
+    // Gate de ENTRADA = passcode LOCAL (sem forçar login na nuvem aqui).
+    // O login/conta Supabase fica no clique da foto de perfil (canto sup. esq.).
+    password: "info2026",
     icon: '<svg viewBox="0 0 64 64"><path d="M11 28 32 16l21 12-21 12L11 28Z"/><path d="M18 34v10c6.8 5.1 21.2 5.1 28 0V34"/><path d="M52 30v13"/></svg>'
     // sem mount: o Core mostra a grade dos filhos (hub).
   });

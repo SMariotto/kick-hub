@@ -66,6 +66,61 @@
         });
     },
 
+    /* entra com TELEFONE + senha (requer provedor de SMS no painel). */
+    signInPhone: function (phone, password) {
+      if (!client) return Promise.resolve({ ok: false, error: "Supabase não configurado." });
+      return client.auth.signInWithPassword({ phone: phone, password: password })
+        .then(function (res) {
+          if (res.error) return { ok: false, error: traduzir(res.error.message) };
+          session = res.data.session;
+          return { ok: true };
+        });
+    },
+
+    /* cria conta por TELEFONE (pode exigir confirmação por SMS). */
+    signUpPhone: function (phone, password) {
+      if (!client) return Promise.resolve({ ok: false, error: "Supabase não configurado." });
+      return client.auth.signUp({ phone: phone, password: password })
+        .then(function (res) {
+          if (res.error) return { ok: false, error: traduzir(res.error.message) };
+          var needsConfirm = res.data && res.data.user && !res.data.session;
+          return { ok: true, needsConfirm: needsConfirm };
+        });
+    },
+
+    /* entra/cadastra com Google (OAuth — redireciona e volta logado). */
+    signInWithGoogle: function () {
+      if (!client) return Promise.resolve({ ok: false, error: "Supabase não configurado." });
+      return client.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin + window.location.pathname }
+      }).then(function (res) {
+        if (res.error) return { ok: false, error: traduzir(res.error.message) };
+        return { ok: true, redirecting: true };
+      });
+    },
+
+    /* vincula uma conta Google ao usuário já logado. */
+    linkGoogle: function () {
+      if (!client || !client.auth.linkIdentity) return Promise.resolve({ ok: false, error: "Recurso indisponível." });
+      return client.auth.linkIdentity({
+        provider: "google",
+        options: { redirectTo: window.location.origin + window.location.pathname }
+      }).then(function (res) {
+        if (res.error) return { ok: false, error: traduzir(res.error.message) };
+        return { ok: true, redirecting: true };
+      });
+    },
+
+    /* atualiza dados do usuário logado: { email | phone | password }. */
+    updateUser: function (changes) {
+      if (!client) return Promise.resolve({ ok: false, error: "Supabase não configurado." });
+      return client.auth.updateUser(changes).then(function (res) {
+        if (res.error) return { ok: false, error: traduzir(res.error.message) };
+        return { ok: true };
+      });
+    },
+
     signOut: function () {
       if (!client) { session = null; emit(); return Promise.resolve(); }
       return client.auth.signOut().then(function () { session = null; });
@@ -85,6 +140,8 @@
     if (/already registered/i.test(msg)) return "Este e-mail já tem conta. Faça login.";
     if (/Password should be at least/i.test(msg)) return "A senha é curta demais (mín. 6).";
     if (/rate limit/i.test(msg)) return "Muitas tentativas. Aguarde um momento.";
+    if (/provider is not enabled|not enabled/i.test(msg)) return "Este método não está habilitado no painel do Supabase.";
+    if (/sms|phone/i.test(msg)) return "Falha no telefone — verifique o número e o provedor de SMS no Supabase.";
     return msg;
   }
 })();
