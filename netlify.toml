@@ -2,15 +2,12 @@
 # Kick Hub — Netlify (CI/CD)
 # ---------------------------------------------------------------------
 # Site estático Vanilla JS: SEM comando de build. Os arquivos do app
-# (index.html, core.js, plugins...) ficam na RAIZ do repositório, então
-# é a raiz que é publicada.
-#
-# Sobre os .bak: eles estão no .gitignore, logo NÃO existem no repositório
-# do GitHub — a Netlify (que faz deploy a partir do Git) nunca os recebe.
+# (index.html, core.js, plugins...) ficam na pasta www/, então é ela que
+# é publicada. Infra (db/*.sql), docs e configs ficam fora do deploy.
 # =====================================================================
 
 [build]
-  publish = "."
+  publish = "www"
   command = ""            # Vanilla JS: nada para compilar
 
 # Cabeçalhos de segurança em todas as respostas.

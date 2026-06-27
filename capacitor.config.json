@@ -1,7 +1,7 @@
 {
   "appId": "com.kickhub.app",
   "appName": "Kick Hub",
-  "webDir": ".",
+  "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https"
