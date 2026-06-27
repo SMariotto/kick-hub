@@ -1,272 +1,312 @@
-# Kick Hub - Guia de Manutenção
+# Kick Hub — Guia de Arquitetura e Manutenção
 
-## Visão geral
+> Mapa oficial do projeto. Leia isto antes de criar uma ferramenta nova.
 
-O Kick Hub é um site estático. Para publicar, basta enviar estes arquivos e pastas para a hospedagem:
+O Kick Hub é um **ecossistema de apps** com interface estilo Nintendo Switch.
+A arquitetura é **modular baseada em plugins**: um **Core** agnóstico fornece as
+APIs e o contêiner, e cada ferramenta é um **plugin independente e deletável**.
+Os dados são **offline-first** (IndexedDB local + Supabase na nuvem), e o mesmo
+código roda na Web (Netlify) e como app Android (Capacitor).
 
-- `index.html`
-- `style.css`
-- `script.js`
-- `data.js`
-- `assets/`
-- `espanhol/`
-- `portugues/`
-- `guide.md` se quiser manter a documentação online no repositório
+---
 
-Não precisa de backend, banco de dados, build, npm ou servidor especial. Abrir `index.html` já carrega o site.
+## 1. Estrutura de pastas
 
-## Senha atual
-
-O único app protegido é `Escola`.
-
-Senha atual:
-
-```txt
-info2026
+```
+kick-hub/  (raiz do repositório — só infra/config/docs)
+├── www/                      ← TUDO que é servido e empacotado
+│   ├── index.html            ← shell mínimo + <script> do core e plugins
+│   ├── core.js               ← o "SO": APIs + contêiner (NÃO conhece apps)
+│   ├── db.js                 ← KickHub.db (offline-first: IndexedDB + Supabase)
+│   ├── auth.js               ← KickHub.auth (login real por e-mail/senha)
+│   ├── kickhub.config.js     ← onde vão a URL e a anon key do Supabase
+│   ├── style.css             ← BEM (kh-), mobile-first, touch
+│   ├── app-escola.js         ← plugin raiz (protegido por login)
+│   ├── app-resumos.js        ← plugin (REFERÊNCIA: dados relacionais via db)
+│   ├── app-trabalhos.js      ← plugin (REFERÊNCIA: dados simples via db)
+│   ├── app-calendario.js     ← plugin (agenda + link cruzado entre apps)
+│   ├── vendor/supabase.js    ← lib do Supabase vendorada (funciona offline/APK)
+│   └── assets/ espanhol/ portugues/
+├── db/
+│   ├── schema.sql            ← tabelas + RLS (rodar no SQL Editor do Supabase)
+│   └── seed.sql              ← dados iniciais (rodar depois do schema)
+├── capacitor.config.json     ← webDir = "www"
+├── netlify.toml              ← publish = "www"
+├── package.json              ← dependências do Capacitor (build Android)
+└── guide.md
 ```
 
-Para trocar a senha, edite em `data.js`:
+Regra de ouro: **só entra em `www/` o que o navegador carrega.** SQL, configs e
+docs ficam na raiz, fora do deploy e do APK.
+
+---
+
+## 2. Como rodar localmente
+
+O app usa `fetch`/IndexedDB/Supabase, então **não** abra o `index.html` por
+`file://`. Use um servidor estático apontando para `www/`:
+
+```bash
+npx serve www
+# ou qualquer servidor estático na pasta www/
+```
+
+Sem chaves do Supabase preenchidas, o app funciona **100% offline** (cache local
++ dados-semente dos plugins) e o login da Escola cai no modo de senha local.
+
+---
+
+## 3. O Core (`core.js`) — o que ele oferece
+
+O Core **não conhece nenhum app específico**. Ele só fornece:
+
+- **Registro dinâmico:** `KickHub.registerApp(config)`.
+- **Roteamento:** `KickHub.navigate(idOuCaminho, params)`, `back()`, `home()`.
+  Apps com `parent` formam uma árvore; um app "hub" (com filhos e sem `mount`)
+  mostra automaticamente a grade dos filhos.
+- **UI base:** header, footer, **modal genérico com blur** e **cadeado genérico**.
+- **Estado/persistência:** `KickHub.store` e `KickHub.storage` (local/session).
+- **Dados:** `KickHub.db` (ver seção 6). **Auth:** `KickHub.auth` (ver seção 7).
+- **Ciclo de vida sem vazamentos:** tudo que o app registra via `ctx` é
+  limpo automaticamente quando ele é desmontado.
+
+### O objeto `ctx` (entregue ao `mount(host, ctx)`)
+
+| Membro | Para que serve |
+|---|---|
+| `ctx.params` | Parâmetros da navegação (ex.: `{ subjectId }`). |
+| `ctx.db` | Acesso a dados offline-first (seção 6). `null` se `db.js` não carregou. |
+| `ctx.auth` | Estado de autenticação (seção 7). |
+| `ctx.on(el, tipo, fn)` | Listener que se **auto-remove** no unmount (sem leaks). |
+| `ctx.cleanup(fn)` | Registra limpeza (timers, observers...). |
+| `ctx.navigate / back / home` | Navegação. |
+| `ctx.setBreadcrumb(sufixo)` | Acrescenta um trecho ao breadcrumb (nav interna). |
+| `ctx.onBack(fn)` | Intercepta o "voltar" (retorne `true` se tratou internamente). |
+| `ctx.addFooterAction({icon,label,onActivate})` | Botão no footer enquanto o app está ativo. |
+| `ctx.ui` | `card()`, `modal()`, `el()`, `icons` (UI reutilizável). |
+
+---
+
+## 4. Anatomia de um plugin (o padrão a seguir SEMPRE)
+
+Todo `app-*.js` é um IIFE com **três camadas**, nesta ordem:
 
 ```js
-schoolPassword: "info2026"
-```
+(function () {
+  "use strict";
+  if (!window.KickHub) return;          // sem Core, o plugin não ativa
+  var el = KickHub.ui.el;
 
-Observação importante: como o site é estático, essa senha é uma proteção simples de interface. Quem souber inspecionar o código do navegador consegue ver a senha. Para segurança real, seria necessário backend/autenticação.
+  /* 1) DADOS / REGRA — sem DOM. É o "seed" offline do app. */
+  var ITENS = [ /* ... */ ];
+  if (KickHub.db) KickHub.db.seed("minha_colecao", ITENS);
 
-## Estrutura dos arquivos
+  /* 2) VIEW — recebe (host, ctx) e só desenha. */
+  function render(host, ctx) {
+    var dados = ITENS;
+    draw();
+    // offline-first: cache/seed instantâneo + revalida na nuvem
+    (ctx.db ? ctx.db.collection("minha_colecao").list()
+            : Promise.resolve(ITENS)).then(function (d) { dados = d; draw(); });
 
-### `index.html`
-
-Contém a estrutura base:
-
-- topo com perfil, relógio e breadcrumb
-- área principal onde o JavaScript renderiza os menus e telas
-- rodapé com botões de configuração e bloqueio
-- modal de senha
-- modal de informação
-- modal de calendário
-- template de card estilo Switch
-- importação de `data.js` e `script.js`
-
-Normalmente você não precisa mexer nele para adicionar matéria nova.
-
-### `style.css`
-
-Define o visual do Kick Hub:
-
-- menu estilo Nintendo Switch
-- cards coloridos com efeitos de hover e glow
-- modais com efeito de vidro (backdrop-filter)
-- telas de resumo
-- responsividade para celular
-
-Para criar uma cor nova de card, adicione uma classe parecida com:
-
-```css
-.sw-card.theme-nova { background: linear-gradient(150deg, #cor1, #cor2); color: var(--white); }
-```
-
-Depois use `theme: "nova"` no item em `data.js`.
-
-### `script.js`
-
-Controla o funcionamento:
-
-- senha única do app Escola
-- navegação entre menus
-- botão voltar
-- renderização de Trabalhos e Resumos
-- calendário escolar com eventos e detalhes do dia
-
-Evite editar `script.js` para conteúdo. Conteúdo entra em `data.js`.
-
-### `data.js`
-
-É o arquivo principal de conteúdo.
-
-Ele contém:
-
-- `schoolPassword`
-- lista de trabalhos em `works`
-- eventos do calendário escolar em `calendarEvents`
-- lista de matérias em `subjects`
-- módulos de cada matéria
-- resumos
-- pontos principais
-- glossário
-- conceitos e fatos de cada módulo
-
-## Como funciona a hierarquia
-
-```txt
-Kick Hub
-└── Escola
-    ├── Trabalhos
-    │   ├── Espanhol
-    │   └── Português
-    └── Resumos
-        ├── Química A
-        ├── Análise Linguística
-        ├── Física
-        ├── Circuitos de Programação
-        ├── Calculadoras Contábeis
-        ├── Lógica de Programação
-        ├── Inglês
-        ├── Matemática A
-        ├── Matemática B
-        ├── Arte
-        ├── Biologia
-        ├── Geografia
-        └── História
-```
-
-Português e Espanhol continuam existindo como trabalhos antigos, mas agora ficam dentro de `Escola > Trabalhos` e não possuem senha própria.
-
-## Como adicionar um trabalho novo
-
-1. Crie uma pasta para o trabalho, por exemplo:
-
-```txt
-historia/
-```
-
-2. Dentro dela, crie a página:
-
-```txt
-historia/revolucao-francesa.html
-```
-
-3. Adicione o trabalho em `data.js`, dentro de `works`:
-
-```js
-{
-  id: "historia-revolucao-francesa",
-  title: "História",
-  subtitle: "Revolução Francesa",
-  icon: "🏛️",
-  theme: "blue",
-  url: "historia/revolucao-francesa.html"
-}
-```
-
-4. O trabalho aparecerá em `Escola > Trabalhos`.
-
-## Como adicionar uma matéria nova
-
-Em `data.js`, adicione um novo objeto dentro de `subjects`.
-
-Modelo:
-
-```js
-{
-  id: "historia",
-  title: "História",
-  icon: "🏛️",
-  theme: "blue",
-  description: "Resumo geral da matéria.",
-  modules: [
-    {
-      id: "historia-1",
-      title: "Módulo 1",
-      subtitle: "Tema do módulo",
-      summary: "Resumo em um parágrafo.",
-      keyPoints: [
-        "Ponto principal 1.",
-        "Ponto principal 2.",
-        "Ponto principal 3."
-      ],
-      glossary: [
-        ["Termo", "Explicação curta."],
-        ["Outro termo", "Outra explicação curta."]
-      ],
-      concepts: ["conceito 1", "conceito 2", "conceito 3"],
-      facts: ["fato importante 1", "fato importante 2", "fato importante 3"]
+    function draw() {
+      var row = el("div", { class: "kh-card-row" });
+      dados.forEach(function (item) {
+        row.appendChild(KickHub.ui.card(item, function () { /* ação */ }));
+      });
+      host.replaceChildren(el("div", { class: "kh-view--menu" }, row));
     }
-  ]
-}
+  }
+
+  /* 3) REGISTRO — único ponto de acoplamento ao Core. */
+  KickHub.registerApp({
+    id: "meu-app",
+    parent: "escola",          // ou null para aparecer direto na home
+    title: "Meu App",
+    subtitle: "Descrição curta",
+    theme: "blue",             // red|blue|green|yellow|violet|dark|white
+    order: 40,
+    icon: '<svg viewBox="0 0 64 64">...</svg>',  // o ícone pertence AO APP
+    mount: render
+  });
+})();
 ```
 
-Depois de salvar, a matéria entra automaticamente em `Resumos`.
+Por fim, **plugue no Core** adicionando uma linha no `www/index.html`:
 
-## Tutorial para uma IA adicionar matéria nova
-
-Use este procedimento quando receber novos PDFs, apostilas ou anotações.
-
-1. Leia o material e identifique a matéria.
-
-2. Separe o conteúdo em módulos. Se o material já tiver módulos, preserve a divisão original. Se não tiver, agrupe por temas.
-
-3. Para cada módulo, produza:
-
-- `subtitle`: nome curto do tema
-- `summary`: um parágrafo com o essencial
-- `keyPoints`: 5 pontos de revisão
-- `glossary`: 5 termos com explicações curtas
-- `concepts`: 8 a 12 palavras-chave
-- `facts`: 5 a 8 afirmações corretas e relevantes sobre o tema
-
-4. Não edite `script.js` para adicionar conteúdo.
-
-5. Insira a matéria em `subjects`, dentro de `data.js`.
-
-6. Garanta que cada `id` seja único, sem espaço e sem acento. Exemplos bons:
-
-```txt
-historia
-historia-1
-biologia-celulas
-matematica-funcoes
+```html
+<script src="app-meu-app.js"></script>
 ```
 
-7. Escolha um `theme` já existente:
+Se você apagar o arquivo (ou remover o `<script>`), o app some do hub e **nada
+quebra** — o Core descobre tudo pelo registro.
 
-```txt
-red
-blue
-green
-yellow
-violet
-dark
-white
+### Campos de `registerApp(config)`
+
+| Campo | Descrição |
+|---|---|
+| `id` | Único, sem espaço/acento. |
+| `parent` | `id` do app pai, ou `null` (raiz, aparece na home). |
+| `title`, `subtitle`, `theme`, `order` | Aparência/ordem do card. |
+| `icon` | SVG (string) ou `function(item)` — **vem do app**, não do Core. |
+| `mount(host, ctx)` | Renderiza dentro de `host`. Omita em apps "hub". |
+| `unmount()` | Limpeza extra (opcional; listeners de `ctx.on` já são limpos). |
+| `locked`, `authRequired`, `password` | Proteção (seção 7). |
+
+---
+
+## 5. Referências vivas: Resumos e Trabalhos
+
+- **`app-trabalhos.js` — o caso simples.** Uma coleção (`works`), uma tela de
+  cards. Mostra o padrão mínimo: `seed` + `collection("works").list()` com
+  fallback offline, e ação que abre páginas externas. **Comece por ele** ao criar
+  um app de listagem.
+
+- **`app-resumos.js` — o caso relacional + navegação interna.** Mostra:
+  - **Duas coleções** (`subjects` + `modules`) recompostas no cliente (a nuvem é
+    relacional; o app monta a árvore aninhada na leitura).
+  - **Navegação interna** (picker → matéria) com `ctx.onBack()` retornando `true`
+    e `ctx.setBreadcrumb(subject.title)`.
+  - **Seed achatado em snake_case** (`subject_id`, `key_points`...) batendo com as
+    colunas do Postgres. Use-o como molde quando o dado tiver relações.
+
+- **`app-calendario.js` — link cruzado entre apps.** O botão "Ir para Resumo"
+  chama `ctx.navigate("resumos", { subjectId })`. Apps se conversam **por id**,
+  sem um conhecer o código do outro.
+
+---
+
+## 6. Persistência offline-first (`KickHub.db`)
+
+O plugin **nunca** fala com o Supabase direto. Fala com `ctx.db`, que decide a
+origem dos dados:
+
+1. responde já com o **cache local** (IndexedDB);
+2. se vazio, usa o **seed** registrado pelo plugin (funciona sem rede);
+3. **revalida na nuvem** em segundo plano (quando logado + online);
+4. escritas são **otimistas** (grava local na hora) e entram numa **outbox**
+   drenada quando há conexão.
+
+### API
+
+```js
+var repo = KickHub.db.collection("nome");
+repo.list({ includeDeleted: false });  // Promise<array>  (cache-first)
+repo.get(id);                          // Promise<registro|null>
+repo.upsert(registro);                 // grava local + enfileira p/ nuvem
+repo.remove(id);                       // soft-delete (tombstone)
+repo.subscribe(cb);                    // notifica em mudanças
+
+KickHub.db.seed("nome", registros);    // seed offline (chame no topo do plugin)
+KickHub.db.sync(["nome"]);             // força revalidação
+KickHub.db.isConfigured();             // há chaves do Supabase?
+KickHub.db.isCloud();                  // configurado E online?
 ```
 
-8. Teste no navegador:
+### Mapeando dados do plugin ↔ tabela do Supabase
 
-- abrir `index.html`
-- entrar em `Escola`
-- digitar a senha
-- abrir `Resumos`
-- conferir a matéria nova
-- abrir um módulo e revisar resumo, pontos principais e glossário
+- Registros são **achatados** e usam **snake_case** (mesmos nomes das colunas).
+- O `db` cuida de `updated_at`/`deleted_at` (merge "last-write-wins").
+- Todo registro precisa de **`id` estável**. Para dados sem id natural (ex.:
+  eventos), gere um id determinístico **igual ao do `seed.sql`**
+  (ex.: `evt-2026-06-24-1`) para o merge cache↔nuvem casar.
 
-9. Se algo não aparecer, verifique:
+### Dado novo na nuvem? Faça os 3 passos juntos
 
-- vírgulas no `data.js`
-- aspas fechadas
-- `id` repetido
-- arrays com `[` e `]`
-- objetos com `{` e `}`
-- se `concepts` e `facts` não estão vazios
+1. **`db/schema.sql`** — crie a tabela com `updated_at`, `deleted_at` e **RLS**
+   habilitado (copie o bloco de uma tabela existente).
+2. **`db/seed.sql`** — popular com `insert ... on conflict (id) do update`
+   (idempotente).
+3. **No plugin** — `KickHub.db.seed("sua_tabela", SEED)` e leia via
+   `ctx.db.collection("sua_tabela")`.
 
-## Assets
+> O `kickhub.config.js` tem um mapa `tables` — só mexa se o nome da coleção no
+> código for diferente do nome da tabela no banco.
 
-O site já usa os assets atuais:
+---
 
-- `assets/pfp.png`
-- `assets/capa-album.jpg`
-- `assets/gregorio-matos-retrato.jpg`
-- `assets/manu-chao-perfil.jpg`
-- `assets/disco-vinil.png`
-- `assets/me-gustas-tu-audio.mp3`
-- `assets/mapa-mundi-vintage.png`
+## 7. Proteção: login real + cadeado genérico
 
-Nenhum asset novo é obrigatório para os menus e resumos. Se quiser melhorar visualmente no futuro, pode adicionar capas por matéria e adaptar o card no `script.js`, mas a versão atual funciona sem isso.
+O Core trata proteção de forma **genérica** — não sabe que existe "Escola".
+Um app declara no registro:
 
-## Checklist antes de publicar
+```js
+locked: true,            // exige desbloqueio para entrar (e nos filhos)
+authRequired: true,      // usa LOGIN real (Supabase) quando há chaves
+password: "info2026"     // fallback local, usado só se o Supabase NÃO estiver configurado
+```
 
-- Abrir `index.html` localmente.
-- Testar senha `info2026`.
-- Conferir `Escola > Trabalhos`.
-- Conferir `Escola > Resumos`.
-- Verificar se a hospedagem mantém a estrutura de pastas.
-- Enviar tudo com codificação UTF-8.
+- Com chaves configuradas → o gate abre o **login por e-mail/senha**
+  (`KickHub.auth`), e "desbloqueado" = autenticado. O cadeado no footer faz
+  **logout**.
+- Sem chaves → cai no **modal de senha local** (`password`), para testes offline.
+
+`KickHub.auth`: `isConfigured()`, `isAuthenticated()`, `getUser()`, `signIn`,
+`signUp`, `signOut`, `onChange(cb)`.
+
+Para colocar um app novo atrás do login, basta dar a ele `parent: "escola"`
+(herda a proteção) — ou declarar `locked/authRequired` no próprio app.
+
+---
+
+## 8. Chaves do Supabase
+
+Em `www/kickhub.config.js`:
+
+```js
+window.KICKHUB_CONFIG = {
+  supabaseUrl: "https://SEU-PROJETO.supabase.co",
+  supabaseAnonKey: "eyJ..."     // anon PÚBLICA (protegida por RLS). Nunca a service_role!
+};
+```
+
+Onde achar: painel do Supabase → **Project Settings → API**. Para não versionar a
+chave, crie `www/kickhub.config.local.js` (já no `.gitignore`) definindo
+`window.KICKHUB_CONFIG_OVERRIDE = { ... }` e inclua o `<script>` dele após o config.
+
+---
+
+## 9. Deploy (Web) e empacotamento (Android)
+
+**Netlify (CI/CD):** `netlify.toml` já define `publish = "www"` e sem build.
+Conecte o repo no painel da Netlify; cada push na `main` publica, cada PR gera
+preview.
+
+**Android (Capacitor):** `capacitor.config.json` usa `webDir = "www"`, então o
+`sync` empacota só a pasta web (APK enxuto, offline-first via bundle local).
+
+```bash
+npm install
+npx cap add android
+npx cap sync android      # a cada mudança no www/
+npx cap open android      # build/run no Android Studio
+```
+
+O botão físico "voltar" do Android já está ligado ao roteamento do Core
+(`core.js` → `setupNativeBridge`): fecha modal → `KickHub.back()` → sai do app.
+
+---
+
+## 10. Checklist para adicionar CONTEÚDO (IA ou humano)
+
+Conteúdo de matéria/trabalho/evento agora vive em **dois lugares espelhados**: o
+**seed** dentro do plugin (offline) e a **tabela** no Supabase (nuvem).
+
+1. Identifique a coleção (`subjects`/`modules`/`works`/`calendar_events` ou uma
+   nova — seção 6).
+2. Acrescente os itens ao **seed** no plugin correspondente, mantendo o formato
+   (snake_case, `id` único, sem acento no id).
+3. Acrescente os mesmos itens ao **`db/seed.sql`** (e a tabela ao `schema.sql` se
+   for nova) e rode no SQL Editor.
+4. Teste por um servidor estático (`npx serve www`): destrave a Escola, confira a
+   ferramenta e a navegação. Console deve ficar **limpo**.
+
+---
+
+## 11. Resumo mental
+
+- **Core** = sistema operacional agnóstico. Não cite apps nele.
+- **Plugin** = 1 arquivo, 3 camadas (dados → view → registro), deletável.
+- **Dados** = sempre por `ctx.db` (seed offline + Supabase). Nunca leia rede direto.
+- **Proteção** = declarativa (`locked`/`authRequired`/`password`).
+- **www/** = web. **raiz** = infra/config. Não misture.
