@@ -11,7 +11,7 @@ node_modules/
 # Segredos / ambiente — NUNCA versionar chaves
 .env
 .env.*
-kick-hub/kickhub.config.local.js
+kickhub.config.local.js
 
 # Sistema operacional / editores
 .DS_Store

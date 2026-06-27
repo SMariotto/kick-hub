@@ -4,7 +4,7 @@
     {
       "name": "kick-hub",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "kick-hub", "-l", "4173"],
+      "runtimeArgs": ["--yes", "serve", ".", "-l", "4173"],
       "port": 4173
     }
   ]

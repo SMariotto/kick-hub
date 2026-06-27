@@ -1,15 +1,16 @@
 # =====================================================================
 # Kick Hub — Netlify (CI/CD)
 # ---------------------------------------------------------------------
-# Site estático Vanilla JS: SEM comando de build. O app vive na subpasta
-# kick-hub/, então é ela que é publicada.
+# Site estático Vanilla JS: SEM comando de build. Os arquivos do app
+# (index.html, core.js, plugins...) ficam na RAIZ do repositório, então
+# é a raiz que é publicada.
 #
 # Sobre os .bak: eles estão no .gitignore, logo NÃO existem no repositório
 # do GitHub — a Netlify (que faz deploy a partir do Git) nunca os recebe.
 # =====================================================================
 
 [build]
-  publish = "kick-hub"
+  publish = "."
   command = ""            # Vanilla JS: nada para compilar
 
 # Cabeçalhos de segurança em todas as respostas.
