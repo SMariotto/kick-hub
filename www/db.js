@@ -31,7 +31,8 @@
   if (configured) {
     try {
       client = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
-        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+        // detectSessionInUrl: true → captura o retorno do OAuth (Google) no hash da URL.
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
       });
     } catch (e) {
       console.error("[KickHub.db] Falha ao criar cliente Supabase:", e);

@@ -335,15 +335,19 @@
     }
   }
 
-  /* 3) REGISTRO. */
+  /* 3) REGISTRO.
+     footer:true  → vira botão FIXO no footer (não aparece como card).
+     parent:null  → utilitário global, acessível sem o passcode da Escola.
+     Ícone em viewBox 24 para casar com os demais botões do footer. */
   KickHub.registerApp({
     id: "calendario",
-    parent: "escola",
+    parent: null,
+    footer: true,
     title: "Calendário",
     subtitle: "Agenda escolar",
     theme: "violet",
     order: 30,
-    icon: '<svg viewBox="0 0 64 64"><path d="M20 12v8M44 12v8"/><rect x="12" y="16" width="40" height="36" rx="4"/><path d="M12 26h40M22 36h6M32 36h6M22 44h6"/></svg>',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>',
     mount: render
   });
 })();

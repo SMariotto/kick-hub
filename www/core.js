@@ -62,7 +62,14 @@
     lock: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
     appDefault: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 18h28v28H18z"/><path d="M32 14v36M14 32h36"/></svg>',
     wifi: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>',
-    battery: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="10" x2="23" y2="14"/></svg>'
+    battery: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="10" x2="23" y2="14"/></svg>',
+    user: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-3 2a13 13 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
+    google: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.2c0-.6-.1-1.2-.2-1.8H12v3.5h5a4.3 4.3 0 0 1-1.9 2.8v2.3h3C19.9 17.5 21 15.1 21 12.2z"/><path d="M12 21c2.4 0 4.5-.8 6-2.2l-3-2.3c-.8.6-1.9.9-3 .9-2.3 0-4.3-1.6-5-3.7H3.9v2.3A9 9 0 0 0 12 21z"/><path d="M7 13.7a5.4 5.4 0 0 1 0-3.4V8H3.9a9 9 0 0 0 0 8z"/><path d="M12 6.6c1.3 0 2.5.5 3.4 1.3l2.5-2.5A9 9 0 0 0 3.9 8L7 10.3c.7-2.1 2.7-3.7 5-3.7z"/></svg>',
+    logout: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
+    link: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>',
+    key: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 21 2M17 5l3 3M14 8l3 3"/></svg>'
   };
 
   /* ----------------------------------------------------------------- *
@@ -345,7 +352,8 @@
   function renderAppGrid(apps, featured) {
     var view = el("section", { class: "kh-view kh-view--menu" });
     var row = el("div", { class: "kh-card-row" + (featured ? " kh-card-row--featured" : "") });
-    apps.forEach(function (app) {
+    // Apps com footer:true viram botão no footer, não card na grade.
+    apps.filter(function (app) { return !app.footer; }).forEach(function (app) {
       row.appendChild(KickHub.ui.card(app, function () { navigate(app.id); }));
     });
     view.appendChild(row);
@@ -361,8 +369,8 @@
     /* ---- Header ---- */
     var topbar = document.getElementById("kh-topbar");
     topbarRefs.home = el("button", {
-      class: "kh-profile", type: "button", "aria-label": "Voltar ao início",
-      onClick: home
+      class: "kh-profile", type: "button", "aria-label": "Conta",
+      onClick: openAccount
     }, el("img", { class: "kh-profile__img", id: "kh-profile-img", alt: "Perfil",
       onError: function () { this.style.visibility = "hidden"; } }));
 
@@ -383,24 +391,41 @@
       ])
     );
 
-    /* ---- Footer ---- */
+    /* ---- Footer ----
+       Botões fixos: Início | [apps de footer] | [ações do app ativo] |
+       Configurações | Bloquear. */
     var footer = document.getElementById("kh-footer");
-    footerRefs.actions = el("div", { class: "kh-footer__actions" });
 
-    // Cadeado genérico (re-bloqueia o subtree trancado atual).
-    footerRefs.lock = buildFooterButton({
-      icon: ICONS.lock, label: "Bloquear",
-      onActivate: relockCurrent
-    });
-    footerRefs.lock.hidden = true;
+    footerRefs.home = buildFooterButton({ icon: ICONS.home, label: "Início", onActivate: home });
+    footerRefs.footerApps = el("div", { class: "kh-footer__actions" }); // apps com footer:true
+    footerRefs.actions = el("div", { class: "kh-footer__actions" });    // ctx.addFooterAction
+    footerRefs.settings = buildFooterButton({ icon: ICONS.gear, label: "Configurações", onActivate: openSettings });
+    footerRefs.lock = buildFooterButton({ icon: ICONS.lock, label: "Bloquear", onActivate: relockCurrent });
 
-    // Configurações: UI base do Core (tema + foto de perfil).
-    footerRefs.settings = buildFooterButton({
-      icon: ICONS.gear, label: "Configurações",
-      onActivate: openSettings
-    });
+    footer.replaceChildren(
+      footerRefs.home,
+      footerRefs.footerApps,
+      footerRefs.actions,
+      footerRefs.settings,
+      footerRefs.lock
+    );
+    rebuildFooterApps();
+  }
 
-    footer.replaceChildren(footerRefs.actions, footerRefs.settings, footerRefs.lock);
+  /* Botões fixos do footer para apps que pedem footer:true (ex.: Calendário). */
+  function rebuildFooterApps() {
+    if (!footerRefs.footerApps) return;
+    footerRefs.footerApps.replaceChildren();
+    order.map(function (id) { return registry[id]; })
+      .filter(function (app) { return app && app.footer; })
+      .sort(function (a, b) { return (a.order || 0) - (b.order || 0); })
+      .forEach(function (app) {
+        var icon = typeof app.icon === "function" ? app.icon(app) : app.icon;
+        footerRefs.footerApps.appendChild(buildFooterButton({
+          icon: icon || ICONS.appDefault, label: app.title,
+          onActivate: function () { navigate(app.id); }
+        }));
+      });
   }
 
   function buildFooterButton(opts) {
@@ -423,24 +448,19 @@
 
   /* Mostra/esconde o cadeado conforme o subtree atual esteja trancável. */
   function syncFooterLock() {
-    var unlockable = null;
-    routePath.forEach(function (id) {
-      var app = registry[id];
-      if (app && app.locked && isUnlocked(app)) unlockable = app;
-    });
-    footerRefs.lock.hidden = !unlockable;
-    footerRefs.lock._target = unlockable;
+    // O cadeado é FIXO no footer; aqui só mantemos a referência aos apps
+    // protegidos atualmente destravados (para o relock saber o que fazer).
+    return;
   }
 
+  /* Re-bloqueia qualquer app protegido que esteja destravado e volta à home. */
   function relockCurrent() {
-    var target = footerRefs.lock._target;
-    if (!target) return;
-    // App com login real: re-bloquear = SAIR da conta (signOut).
-    if (usesAuth(target)) {
-      KickHub.auth.signOut().then(home);
-      return;
-    }
-    setUnlocked(target, false);
+    order.map(function (id) { return registry[id]; })
+      .filter(function (app) { return app && app.locked && isUnlocked(app); })
+      .forEach(function (app) {
+        if (usesAuth(app) && KickHub.auth) KickHub.auth.signOut();
+        else setUnlocked(app, false);
+      });
     home();
   }
 
@@ -656,59 +676,281 @@
     if (img) { img.style.visibility = ""; img.src = src; }
   }
 
+  /* Blocos reutilizáveis (usados tanto em Configurações quanto na Conta). */
+  function buildThemeRow() {
+    var dark = local.get("kickhub.darkMode") === "true";
+    var toggle = el("button", {
+      class: "kh-toggle", type: "button", "aria-pressed": String(dark), text: dark ? "On" : "Off"
+    });
+    toggle.addEventListener("click", function () {
+      dark = !dark;
+      local.set("kickhub.darkMode", String(dark));
+      toggle.textContent = dark ? "On" : "Off";
+      toggle.setAttribute("aria-pressed", String(dark));
+      applyTheme();
+    });
+    return el("div", { class: "kh-setting-row" }, [
+      el("div", null, [
+        el("strong", { text: "Modo escuro" }),
+        el("span", { text: "Alterna a aparência do Kick Hub." })
+      ]),
+      toggle
+    ]);
+  }
+
+  function buildProfileSection() {
+    var picker = el("div", { class: "kh-profile-picker" });
+    var current = local.get("kickhub.profile", "assets/pfp.png");
+    PROFILE_OPTIONS.forEach(function (src) {
+      var opt = el("button", {
+        class: "kh-profile-option" + (src === current ? " is-active" : ""),
+        type: "button", "aria-label": "Usar " + src
+      }, el("img", { src: src, alt: "", onError: function () { this.style.visibility = "hidden"; } }));
+      opt.addEventListener("click", function () {
+        local.set("kickhub.profile", src);
+        applyProfile();
+        picker.querySelectorAll(".kh-profile-option").forEach(function (b) {
+          b.classList.toggle("is-active", b === opt);
+        });
+      });
+      picker.appendChild(opt);
+    });
+    return el("div", { class: "kh-setting-section" }, [
+      el("strong", { text: "Foto de perfil" }),
+      el("span", { text: "Coloque imagens com estes nomes dentro de assets." }),
+      picker
+    ]);
+  }
+
   function openSettings() {
     openModal({
       className: "kh-modal--glass",
       render: function (body) {
         body.appendChild(el("h2", { class: "kh-modal__title", text: "Configurações" }));
-
-        var dark = local.get("kickhub.darkMode") === "true";
-        var toggle = el("button", {
-          class: "kh-toggle", type: "button", "aria-pressed": String(dark),
-          text: dark ? "On" : "Off"
-        });
-        toggle.addEventListener("click", function () {
-          dark = !dark;
-          local.set("kickhub.darkMode", String(dark));
-          toggle.textContent = dark ? "On" : "Off";
-          toggle.setAttribute("aria-pressed", String(dark));
-          applyTheme();
-        });
-
-        var themeRow = el("div", { class: "kh-setting-row" }, [
-          el("div", null, [
-            el("strong", { text: "Modo escuro" }),
-            el("span", { text: "Alterna a aparência do Kick Hub." })
-          ]),
-          toggle
-        ]);
-
-        var picker = el("div", { class: "kh-profile-picker" });
-        var current = local.get("kickhub.profile", "assets/pfp.png");
-        PROFILE_OPTIONS.forEach(function (src) {
-          var opt = el("button", {
-            class: "kh-profile-option" + (src === current ? " is-active" : ""),
-            type: "button", "aria-label": "Usar " + src
-          }, el("img", { src: src, alt: "", onError: function () { this.style.visibility = "hidden"; } }));
-          opt.addEventListener("click", function () {
-            local.set("kickhub.profile", src);
-            applyProfile();
-            picker.querySelectorAll(".kh-profile-option").forEach(function (b) {
-              b.classList.toggle("is-active", b === opt);
-            });
-          });
-          picker.appendChild(opt);
-        });
-
-        var profileSection = el("div", { class: "kh-setting-section" }, [
-          el("strong", { text: "Foto de perfil" }),
-          el("span", { text: "Coloque imagens com estes nomes dentro de assets." }),
-          picker
-        ]);
-
-        body.appendChild(el("div", { class: "kh-setting-stack" }, [themeRow, profileSection]));
+        body.appendChild(el("div", { class: "kh-setting-stack" }, [buildThemeRow(), buildProfileSection()]));
       }
     });
+  }
+
+  /* ----------------------------------------------------------------- *
+   * Conta (clique na foto de perfil): login/cadastro OU gestão.        *
+   * ----------------------------------------------------------------- */
+
+  // Linha genérica "rótulo + input + salvar" com feedback inline.
+  function accountAction(opts) {
+    var input = el("input", { class: "kh-input", type: opts.inputType || "text", placeholder: opts.placeholder || "", autocomplete: opts.autocomplete || "off" });
+    var msg = el("p", { class: "kh-input-error" });
+    var btn = el("button", { class: "kh-btn kh-btn--primary", type: "submit", text: opts.button || "Salvar" });
+    var form = el("form", { class: "kh-form", autocomplete: "off" }, [input, msg, btn]);
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      msg.classList.remove("is-visible", "is-ok");
+      var val = input.value.trim();
+      if (!val) return;
+      btn.disabled = true; var old = btn.textContent; btn.textContent = "Aguarde…";
+      Promise.resolve(opts.onSubmit(val)).then(function (r) {
+        btn.disabled = false; btn.textContent = old;
+        if (r && r.ok) {
+          msg.textContent = opts.success || "Feito!"; msg.classList.add("is-visible", "is-ok"); input.value = "";
+        } else {
+          msg.textContent = (r && r.error) || "Não foi possível salvar."; msg.classList.add("is-visible");
+        }
+      });
+    });
+    var children = [el("strong", { text: opts.label })];
+    if (opts.hint) children.push(el("span", { text: opts.hint }));
+    children.push(form);
+    return el("div", { class: "kh-setting-section" }, children);
+  }
+
+  function providerButton(iconKey, label, onClick) {
+    var b = el("button", { class: "kh-provider", type: "button" }, [
+      el("span", { class: "kh-provider__icon", html: ICONS[iconKey] }),
+      el("span", { text: label })
+    ]);
+    b.addEventListener("click", onClick);
+    return b;
+  }
+
+  function openAccount() {
+    var auth = KickHub.auth;
+    openModal({
+      className: "kh-modal--glass",
+      render: function (body, handle) {
+        function rerender() {
+          body.replaceChildren();
+          if (auth && auth.isConfigured() && auth.isAuthenticated()) renderManage(body, handle, rerender);
+          else renderLogin(body, handle, rerender);
+        }
+        rerender();
+      }
+    });
+  }
+
+  /* --- Deslogado: login/cadastro (e-mail, telefone, Google) --- */
+  function renderLogin(body, handle, rerender) {
+    var auth = KickHub.auth;
+    body.appendChild(el("div", { class: "kh-modal__icon", html: ICONS.user }));
+    body.appendChild(el("h2", { class: "kh-modal__title", text: "Entrar no Kick Hub" }));
+
+    if (!auth || !auth.isConfigured()) {
+      body.appendChild(el("p", { class: "kh-modal__hint", text: "Login na nuvem indisponível: configure as chaves do Supabase em kickhub.config.js." }));
+      return;
+    }
+    body.appendChild(el("p", { class: "kh-modal__hint", text: "Sua sessão fica salva — feche e volte que continua logado." }));
+
+    var method = "email";
+    var seg = el("div", { class: "kh-seg" });
+    var area = el("div", { class: "kh-account-area" });
+
+    [["email", "E-mail"], ["phone", "Telefone"], ["google", "Google"]].forEach(function (m) {
+      var b = el("button", { class: "kh-seg__btn" + (m[0] === method ? " is-active" : ""), type: "button", text: m[1] });
+      b.addEventListener("click", function () {
+        method = m[0];
+        seg.querySelectorAll(".kh-seg__btn").forEach(function (x) { x.classList.toggle("is-active", x === b); });
+        paint();
+      });
+      seg.appendChild(b);
+    });
+
+    body.appendChild(seg);
+    body.appendChild(area);
+    paint();
+
+    function paint() {
+      area.replaceChildren();
+      if (method === "google") {
+        area.appendChild(el("p", { class: "kh-modal__hint", text: "Você será redirecionado ao Google e volta já logado." }));
+        area.appendChild(providerButton("google", "Continuar com Google", function () {
+          auth.signInWithGoogle().then(function (r) { if (!r.ok) flash(area, r.error); });
+        }));
+        return;
+      }
+      area.appendChild(credForm(method, handle, rerender));
+    }
+  }
+
+  // Formulário e-mail/telefone com alternância Entrar/Criar conta.
+  function credForm(kind, handle, rerender) {
+    var auth = KickHub.auth;
+    var isEmail = kind === "email";
+    var mode = "in"; // in = entrar | up = criar
+    var id = el("input", {
+      class: "kh-input", type: isEmail ? "email" : "tel",
+      placeholder: isEmail ? "seu@email.com" : "+55 11 99999-9999",
+      autocomplete: isEmail ? "username" : "tel", inputmode: isEmail ? "email" : "tel"
+    });
+    var pass = el("input", { class: "kh-input", type: "password", placeholder: "••••••••", autocomplete: "current-password" });
+    var err = el("p", { class: "kh-input-error" });
+    var submit = el("button", { class: "kh-btn kh-btn--primary", type: "submit", text: "Entrar" });
+    var toggle = el("button", { class: "kh-link-btn", type: "button", text: "Criar uma conta" });
+
+    function setMode(m) {
+      mode = m;
+      submit.textContent = m === "in" ? "Entrar" : "Criar conta";
+      toggle.textContent = m === "in" ? "Criar uma conta" : "Já tenho conta";
+      err.classList.remove("is-visible");
+    }
+    toggle.addEventListener("click", function () { setMode(mode === "in" ? "up" : "in"); });
+
+    var form = el("form", { class: "kh-form", autocomplete: "off" }, [id, pass, err, submit, toggle]);
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      err.classList.remove("is-visible");
+      submit.disabled = true; submit.textContent = "Aguarde…";
+      var v = id.value.trim(), p = pass.value;
+      var op = isEmail
+        ? (mode === "in" ? auth.signIn(v, p) : auth.signUp(v, p))
+        : (mode === "in" ? auth.signInPhone(v, p) : auth.signUpPhone(v, p));
+      op.then(function (r) {
+        submit.disabled = false; setMode(mode);
+        if (r.ok && r.needsConfirm) {
+          err.textContent = isEmail ? "Conta criada! Confirme o e-mail e entre." : "Confirme o código enviado por SMS e entre.";
+          err.classList.add("is-visible", "is-ok"); setMode("in");
+        } else if (r.ok) {
+          handle.close();
+        } else {
+          err.textContent = r.error || "Não foi possível autenticar."; err.classList.add("is-visible");
+          pass.value = "";
+        }
+      }).catch(function () {
+        submit.disabled = false; setMode(mode);
+        err.textContent = "Erro de conexão."; err.classList.add("is-visible");
+      });
+    });
+    return form;
+  }
+
+  /* --- Logado: gestão completa da conta --- */
+  function renderManage(body, handle, rerender) {
+    var auth = KickHub.auth;
+    var user = auth.getUser() || {};
+    var identities = user.identities || [];
+    var hasGoogle = identities.some(function (i) { return i.provider === "google"; });
+
+    body.appendChild(el("h2", { class: "kh-modal__title", text: "Minha conta" }));
+    body.appendChild(el("p", { class: "kh-modal__hint", text: user.email || user.phone || "Conectado" }));
+
+    var stack = el("div", { class: "kh-setting-stack" });
+
+    // Aparência (reaproveita os blocos de Configurações).
+    stack.appendChild(buildProfileSection());
+    stack.appendChild(buildThemeRow());
+
+    // E-mail (trocar ou vincular).
+    stack.appendChild(accountAction({
+      label: user.email ? "Trocar e-mail" : "Vincular e-mail",
+      hint: user.email ? ("Atual: " + user.email) : "Adicione um e-mail à sua conta.",
+      inputType: "email", placeholder: "novo@email.com", button: user.email ? "Trocar" : "Vincular",
+      success: "Verifique sua caixa de entrada para confirmar.",
+      onSubmit: function (v) { return auth.updateUser({ email: v }); }
+    }));
+
+    // Telefone (trocar ou vincular).
+    stack.appendChild(accountAction({
+      label: user.phone ? "Trocar telefone" : "Vincular telefone",
+      hint: user.phone ? ("Atual: " + user.phone) : "Adicione um número à sua conta.",
+      inputType: "tel", placeholder: "+55 11 99999-9999", button: user.phone ? "Trocar" : "Vincular",
+      success: "Confirme o código enviado por SMS.",
+      onSubmit: function (v) { return auth.updateUser({ phone: v }); }
+    }));
+
+    // Google (vincular).
+    var googleSection = el("div", { class: "kh-setting-section" }, [
+      el("strong", { text: "Conta Google" }),
+      el("span", { text: hasGoogle ? "Google já vinculado a esta conta." : "Vincule sua conta Google para entrar com 1 clique." })
+    ]);
+    if (!hasGoogle) {
+      googleSection.appendChild(providerButton("google", "Vincular conta Google", function () {
+        auth.linkGoogle().then(function (r) { if (!r.ok) flash(googleSection, r.error); });
+      }));
+    }
+    stack.appendChild(googleSection);
+
+    // Senha.
+    stack.appendChild(accountAction({
+      label: "Alterar senha", inputType: "password", placeholder: "nova senha (mín. 6)",
+      autocomplete: "new-password", button: "Alterar", success: "Senha atualizada.",
+      onSubmit: function (v) { return auth.updateUser({ password: v }); }
+    }));
+
+    // Sair.
+    var out = el("button", { class: "kh-btn kh-provider kh-provider--danger", type: "button" }, [
+      el("span", { class: "kh-provider__icon", html: ICONS.logout }),
+      el("span", { text: "Sair da conta" })
+    ]);
+    out.addEventListener("click", function () {
+      auth.signOut().then(function () { rerender(); });
+    });
+    stack.appendChild(out);
+
+    body.appendChild(stack);
+  }
+
+  function flash(container, text) {
+    var p = el("p", { class: "kh-input-error is-visible", text: text || "Erro." });
+    container.appendChild(p);
+    window.setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 4000);
   }
 
   /* ----------------------------------------------------------------- *
@@ -738,7 +980,8 @@
     homeRefreshQueued = true;
     requestAnimationFrame(function () {
       homeRefreshQueued = false;
-      if (routePath.length === 0) renderRoute(); // mantém a home em dia
+      rebuildFooterApps();                         // apps de footer registrados tarde
+      if (routePath.length === 0) renderRoute();   // mantém a home em dia
     });
   }
 
