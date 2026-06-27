@@ -152,11 +152,40 @@
     }
   ];
 
-  function eventsByDate() {
-    return EVENTS.reduce(function (acc, ev) {
+  /* 1b) PONTE COM A NUVEM (KickHub.db) — sem a VIEW saber dela.
+     EVENTS (acima) é o seed humano-legível. No banco os campos são
+     `subject_id` (snake) e cada linha tem um `id` determinístico igual
+     ao do seed.sql (evt-<data>-<n>), para o merge cache/nuvem casar. */
+  var EVENTS_SEED = (function () {
+    var counter = {}, i = 0;
+    return EVENTS.map(function (e) {
+      counter[e.date] = (counter[e.date] || 0) + 1;
+      return {
+        id: "evt-" + e.date + "-" + counter[e.date],
+        date: e.date,
+        subject_id: e.subjectId != null ? e.subjectId : null,
+        title: e.title, time: e.time, type: e.type,
+        warnings: e.warnings || [], order_index: i++
+      };
+    });
+  })();
+  if (KickHub.db) KickHub.db.seed("calendar_events", EVENTS_SEED);
+
+  function byOrder(a, b) { return (a.order_index || 0) - (b.order_index || 0); }
+
+  function groupByDate(events) {
+    return events.reduce(function (acc, ev) {
       (acc[ev.date] = acc[ev.date] || []).push(ev);
       return acc;
     }, {});
+  }
+
+  // Leitura offline-first: seed/cache instantâneo + revalidação na nuvem.
+  function loadEvents(ctx) {
+    if (!ctx.db) return Promise.resolve(EVENTS_SEED.slice());
+    return ctx.db.collection("calendar_events").list()
+      .then(function (rows) { return (rows && rows.length ? rows : EVENTS_SEED).slice().sort(byOrder); })
+      .catch(function () { return EVENTS_SEED.slice(); });
   }
   function dateKey(date) {
     return date.getFullYear() + "-" +
@@ -170,8 +199,8 @@
   function formatLong(key) {
     return parseKey(key).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
   }
-  function initialMonth() {
-    var sorted = EVENTS.slice().sort(function (a, b) { return a.date.localeCompare(b.date); });
+  function initialMonth(events) {
+    var sorted = events.slice().sort(function (a, b) { return a.date.localeCompare(b.date); });
     if (sorted.length) {
       var p = sorted[0].date.split("-").map(Number);
       return new Date(p[0], p[1] - 1, 1);
@@ -184,8 +213,9 @@
 
   /* 2) VIEW. */
   function render(host, ctx) {
-    var month = initialMonth();
-    var byDate = eventsByDate();
+    var events = EVENTS_SEED;                 // começa no seed; nuvem atualiza abaixo
+    var month = initialMonth(events);
+    var byDate = groupByDate(events);
 
     var title = el("h2", { class: "kh-cal__title" });
     var grid = el("div", { class: "kh-cal__grid" });
@@ -206,6 +236,11 @@
 
     host.replaceChildren(el("div", { class: "kh-panel kh-cal" }, [head, weekdays, grid]));
     paint();
+
+    // Revalida com cache/nuvem e repinta, preservando o mês atual.
+    loadEvents(ctx).then(function (data) {
+      if (data && data.length) { events = data; byDate = groupByDate(events); paint(); }
+    });
 
     function navBtn(icon, label, onClick) {
       var b = el("button", { class: "kh-cal__nav-btn", type: "button", "aria-label": label,
@@ -282,10 +317,10 @@
                 ev.warnings.map(function (w) { return el("li", { text: w }); })));
             }
             var goBtn = el("button", { class: "kh-btn kh-btn--primary", type: "button", text: "Ir para Resumo" });
-            if (ev.subjectId && KickHub.getApp("resumos")) {
+            if (ev.subject_id && KickHub.getApp("resumos")) {
               goBtn.addEventListener("click", function () {
                 handle.close();
-                ctx.navigate("resumos", { subjectId: ev.subjectId });
+                ctx.navigate("resumos", { subjectId: ev.subject_id });
               });
             } else {
               goBtn.disabled = true;

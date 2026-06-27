@@ -19,9 +19,9 @@
    app antes mesmo de criar o projeto no Supabase.
    ===================================================================== */
 window.KICKHUB_CONFIG = {
-  // Cole entre as aspas:
-  supabaseUrl: "",        // ex: "https://abcdxyz.supabase.co"
-  supabaseAnonKey: "",    // ex: "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+  // Projeto Kick Hub (chaves PÚBLICAS — anon protegida por RLS):
+  supabaseUrl: "https://daypaxsqydjnbcxhqlog.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRheXBheHNxeWRqbmJjeGhxbG9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTI5NzAsImV4cCI6MjA5ODA2ODk3MH0.FUWkCMgniQG7i3SYzNc_NO-Xu5vI7Hx89I5r-ckNo6g",
 
   // Tabelas no Postgres (não precisa mexer).
   tables: {

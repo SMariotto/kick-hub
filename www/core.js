@@ -742,6 +742,28 @@
     });
   }
 
+  /* ----------------------------------------------------------------- *
+   * Ponte nativa (Capacitor) — botão físico "voltar" do Android.       *
+   * Sem dependência de import: usa window.Capacitor injetado pela       *
+   * WebView. No navegador comum, window.Capacitor não existe → no-op.   *
+   * ----------------------------------------------------------------- */
+  function setupNativeBridge() {
+    var Cap = window.Capacitor;
+    if (!Cap || !Cap.Plugins || !Cap.Plugins.App) return;
+    var App = Cap.Plugins.App;
+    App.addListener("backButton", function () {
+      // 1) há modal aberto? fecha o do topo.
+      if (modalStack.length) { closeModal(modalStack[modalStack.length - 1]); return; }
+      // 2) dá para voltar (inclui o "voltar" interno do app ativo)? volta.
+      if (routePath.length > 0 || (active && typeof active.backHandler === "function")) {
+        back();
+        return;
+      }
+      // 3) já na home: sai do app (comportamento nativo esperado).
+      App.exitApp();
+    });
+  }
+
   function boot() {
     appRoot = document.getElementById("kh-app");
     modalRoot = document.getElementById("kh-modal-root");
@@ -749,6 +771,7 @@
     applyTheme();
     applyProfile();
     startClock();
+    setupNativeBridge();
     booted = true;
     renderRoute();
 

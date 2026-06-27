@@ -1,0 +1,32 @@
+# =====================================================================
+# Kick Hub — Netlify (CI/CD)
+# ---------------------------------------------------------------------
+# Site estático Vanilla JS: SEM comando de build. Os arquivos do app
+# (index.html, core.js, plugins...) ficam na pasta www/, então é ela que
+# é publicada. Infra (db/*.sql), docs e configs ficam fora do deploy.
+# =====================================================================
+
+[build]
+  publish = "www"
+  command = ""            # Vanilla JS: nada para compilar
+
+# Cabeçalhos de segurança em todas as respostas.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Assets imutáveis podem ter cache longo.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# core.js, plugins, db/auth e config mudam: revalidar sempre.
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
