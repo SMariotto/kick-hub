@@ -183,9 +183,17 @@
       list: function (opts) {
         opts = opts || {};
         return cacheGet(name).then(function (cache) {
-          if (!cache || !cache.length) {
-            cache = (seeds[name] || []).map(function (r) { return stamp(Object.assign({}, r)); });
-            if (cache.length) cacheSet(name, cache);
+          cache = cache || [];
+          // Mescla do seed os registros que ainda não existem no cache (por id).
+          // Cobre tanto o 1º carregamento quanto a ADIÇÃO de itens ao seed depois,
+          // sem sobrescrever versões mais novas vindas da nuvem/edições locais.
+          var seed = seeds[name] || [];
+          if (seed.length) {
+            var have = {};
+            cache.forEach(function (r) { have[r.id] = true; });
+            var add = seed.filter(function (r) { return !have[r.id]; })
+                          .map(function (r) { return stamp(Object.assign({}, r)); });
+            if (add.length) { cache = cache.concat(add); cacheSet(name, cache); }
           }
           // revalida sem bloquear a resposta
           pull(name);
