@@ -252,6 +252,24 @@ svg { display: block; }
 .kh-card--yellow .kh-card__meta, .kh-card--violet .kh-card__meta, .kh-card--dark .kh-card__meta { color: rgba(255, 255, 255, .82); }
 .kh-card--white .kh-card__meta { color: var(--kh-ink-soft); }
 
+/* Destaque das matérias de prova */
+.kh-card__badge {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  z-index: 2;
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  background: var(--kh-red);
+  color: #fff;
+  font-size: clamp(.58rem, 2.2vw, .68rem);
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+}
+.kh-card--exam { box-shadow: 0 4px 14px rgba(0, 0, 0, .07), 0 0 0 2px var(--kh-red) inset; }
+
 /* Grade em destaque (hubs com poucos filhos) */
 @media (min-width: 720px) {
   .kh-card-row--featured { --kh-card-size: 16rem; gap: clamp(2rem, 4vw, 3.2rem); }

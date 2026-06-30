@@ -2879,6 +2879,815 @@
   ];
 
   // Ícones por matéria pertencem AO APP (o Core não conhece matérias).
+
+  /* Matérias NOVAS (puxadas de modulos.md). Não recebem badge de Prova. */
+  var SUBJECTS_NOVAS = [
+    {
+      "id": "literatura",
+      "title": "Literatura e Arte",
+      "icon": "🎭",
+      "theme": "violet",
+      "description": "Renascimento e Camões, Quinhentismo e Barroco.",
+      "modules": [
+        {
+          "id": "literatura-3",
+          "title": "Módulo 3",
+          "subtitle": "Renascimento e Camões",
+          "summary": "O Renascimento (séc. XV–XVI) retoma a Antiguidade Clássica e coloca o ser humano no centro (antropocentrismo), valorizando razão, equilíbrio e harmonia. Na língua portuguesa, Luís de Camões é o nome máximo: na épica escreve Os Lusíadas (1572), epopeia em 10 cantos e versos decassílabos que narra a viagem de Vasco da Gama às Índias e exalta o povo português; na lírica cultiva a 'medida velha' (redondilhas, temas populares) e a 'medida nova' (sonetos decassílabos de influência clássica e platônica), tratando do amor idealizado e do 'desconcerto do mundo'.",
+          "keyPoints": [
+            "Renascimento: antropocentrismo, racionalismo, equilíbrio e resgate da Antiguidade Clássica.",
+            "Os Lusíadas: epopeia de 10 cantos, 1102 estrofes em oitava-rima (ABABABCC) e versos decassílabos.",
+            "Estrutura da epopeia: proposição, invocação, dedicatória, narração e epílogo.",
+            "Episódios célebres: Inês de Castro, Velho do Restelo, Gigante Adamastor e Ilha dos Amores.",
+            "Lírica: 'medida velha' (redondilhas) e 'medida nova' (sonetos decassílabos)."
+          ],
+          "glossary": [
+            [
+              "Epopeia",
+              "Longo poema narrativo, em tom elevado, sobre feitos heroicos de um povo."
+            ],
+            [
+              "Antropocentrismo",
+              "Visão que coloca o ser humano no centro, típica do Renascimento."
+            ],
+            [
+              "Medida nova",
+              "Verso decassílabo e formas como o soneto, de inspiração clássica italiana."
+            ],
+            [
+              "Redondilha",
+              "Verso de 5 (menor) ou 7 (maior) sílabas, da 'medida velha'."
+            ],
+            [
+              "Desconcerto do mundo",
+              "Tema camoniano da desordem e instabilidade da vida."
+            ]
+          ],
+          "concepts": [
+            "renascimento",
+            "camões",
+            "os lusíadas",
+            "epopeia",
+            "decassílabo",
+            "soneto",
+            "lírica",
+            "medida velha",
+            "medida nova",
+            "antropocentrismo",
+            "vasco da gama",
+            "adamastor"
+          ],
+          "facts": [
+            "Os Lusíadas foram publicados em 1572 e têm como assunto central a viagem de Vasco da Gama (1497–1499).",
+            "A obra mistura mitologia greco-romana e referências bíblicas (fusionismo).",
+            "O episódio do Velho do Restelo traz uma voz crítica às Grandes Navegações.",
+            "O soneto 'Amor é fogo que arde sem se ver' é exemplo da lírica de 'medida nova'.",
+            "A poesia em 'medida velha' resgata temas da cultura popular e ibérica medieval."
+          ]
+        },
+        {
+          "id": "literatura-4",
+          "title": "Módulo 4",
+          "subtitle": "Quinhentismo no Brasil",
+          "summary": "O Quinhentismo reúne as primeiras manifestações escritas em terras brasileiras no século XVI, ligadas à colonização. Divide-se em literatura de informação (relatos de viajantes e cronistas sobre a nova terra, como a Carta de Pero Vaz de Caminha, de 1500) e literatura de catequese (textos jesuíticos voltados à conversão dos indígenas, com destaque para o padre José de Anchieta e seus autos, poemas e a gramática do tupi). Não é ainda uma literatura 'brasileira', mas um conjunto de textos produzidos sobre o Brasil.",
+          "keyPoints": [
+            "Quinhentismo = primeiras manifestações literárias no Brasil colonial (séc. XVI).",
+            "Literatura de informação: relatos de cronistas e viajantes sobre a nova terra.",
+            "Carta de Pero Vaz de Caminha (1500): 'certidão de nascimento' do Brasil.",
+            "Literatura de catequese: textos jesuíticos de conversão dos indígenas.",
+            "José de Anchieta: autos, poemas e a gramática da língua tupi."
+          ],
+          "glossary": [
+            [
+              "Quinhentismo",
+              "Conjunto de textos produzidos no Brasil no século XVI (anos 1500)."
+            ],
+            [
+              "Literatura de informação",
+              "Relatos descritivos da terra recém-'descoberta'."
+            ],
+            [
+              "Literatura de catequese",
+              "Produção jesuítica voltada à conversão religiosa."
+            ],
+            [
+              "Auto",
+              "Peça teatral curta de caráter religioso e didático."
+            ],
+            [
+              "Cronista",
+              "Autor que registra fatos e observações de viagem."
+            ]
+          ],
+          "concepts": [
+            "quinhentismo",
+            "carta de caminha",
+            "literatura de informação",
+            "catequese",
+            "anchieta",
+            "jesuítas",
+            "colonização",
+            "tupi",
+            "crônica",
+            "auto"
+          ],
+          "facts": [
+            "A Carta de Caminha foi escrita em 1500 e descreve a terra e os indígenas ao rei de Portugal.",
+            "A produção do período é em português (e tupi), feita por europeus.",
+            "Os jesuítas usavam o teatro (autos) como instrumento de catequese.",
+            "José de Anchieta escreveu uma das primeiras gramáticas do tupi.",
+            "O Quinhentismo não constitui uma literatura nacional, mas textos sobre o Brasil."
+          ]
+        },
+        {
+          "id": "literatura-5",
+          "title": "Módulo 5",
+          "subtitle": "Barroco: Vieira e Gregório",
+          "summary": "O Barroco (séc. XVII) nasce da crise entre os valores medievais (teocentrismo) e renascentistas (antropocentrismo), expressando conflito, dualidade e forte religiosidade. Caracteriza-se pelo cultismo (jogo de imagens e metáforas, 'culto à forma') e pelo conceptismo (jogo de ideias e raciocínio). No Brasil destacam-se o padre Antônio Vieira, mestre da prosa nos Sermões (conceptismo e persuasão), e Gregório de Matos, o 'Boca do Inferno', autor de poesia religiosa, amorosa e, sobretudo, satírica contra a sociedade baiana.",
+          "keyPoints": [
+            "Barroco (séc. XVII): conflito entre fé (teocentrismo) e razão (antropocentrismo).",
+            "Cultismo: jogo de palavras e imagens (metáforas, antíteses) — culto à forma.",
+            "Conceptismo: jogo de ideias e raciocínio lógico-argumentativo.",
+            "Padre Antônio Vieira: os Sermões, marco da prosa conceptista.",
+            "Gregório de Matos: poesia religiosa, amorosa e satírica ('Boca do Inferno')."
+          ],
+          "glossary": [
+            [
+              "Cultismo",
+              "Estilo barroco baseado em jogos de imagem e excesso de figuras."
+            ],
+            [
+              "Conceptismo",
+              "Estilo barroco baseado no jogo de ideias e na argumentação."
+            ],
+            [
+              "Antítese",
+              "Figura que aproxima ideias opostas, típica do Barroco."
+            ],
+            [
+              "Sermão",
+              "Texto religioso persuasivo; gênero dominado por Vieira."
+            ],
+            [
+              "Sátira",
+              "Poesia crítica e mordaz, marca de Gregório de Matos."
+            ]
+          ],
+          "concepts": [
+            "barroco",
+            "cultismo",
+            "conceptismo",
+            "antítese",
+            "vieira",
+            "sermões",
+            "gregório de matos",
+            "sátira",
+            "teocentrismo",
+            "boca do inferno"
+          ],
+          "facts": [
+            "O Barroco brasileiro tem como marco 1601 (Prosopopeia, de Bento Teixeira).",
+            "Vieira defendeu indígenas e usou a argumentação conceptista em seus sermões.",
+            "Gregório de Matos ficou conhecido como 'Boca do Inferno' pela poesia satírica.",
+            "A antítese e o paradoxo expressam o conflito espiritual barroco.",
+            "O cultismo é associado ao espanhol Luís de Góngora ('gongorismo')."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "producao-texto",
+      "title": "Produção de Texto",
+      "icon": "✍️",
+      "theme": "blue",
+      "description": "Comunicação digital, redes sociais e dissertação.",
+      "modules": [
+        {
+          "id": "producao-texto-3",
+          "title": "Módulo 3",
+          "subtitle": "Tecnologias Digitais (TDIC)",
+          "summary": "As Tecnologias Digitais da Informação e da Comunicação (TDIC) são o estágio mais recente de uma longa evolução: primado da fala, invenção da escrita, comunicação a distância (telefone, rádio, TV) e, por fim, os meios digitais (computadores, celulares, internet). No ambiente digital surgem gêneros próprios (post, tweet, e-mail, chat) marcados pela efemeridade — aparecem e desaparecem rápido — e por uma variedade informal, o 'internetês'. Compreender esses recursos é essencial para produzir textos adequados a cada suporte e situação.",
+          "keyPoints": [
+            "Estágios da comunicação: fala, escrita, comunicação a distância e meios digitais.",
+            "TDIC: tecnologias digitais que integram informação e comunicação.",
+            "Gêneros digitais surgem e desaparecem rapidamente (efemeridade).",
+            "'Internetês': variedade linguística informal típica do meio digital.",
+            "A tela é um novo suporte que muda a forma de ler e escrever."
+          ],
+          "glossary": [
+            [
+              "TDIC",
+              "Tecnologias Digitais da Informação e da Comunicação."
+            ],
+            [
+              "Gênero digital",
+              "Tipo de texto próprio do meio digital (post, chat, e-mail...)."
+            ],
+            [
+              "Internetês",
+              "Variedade informal e abreviada usada na internet."
+            ],
+            [
+              "Suporte",
+              "Meio físico/virtual em que o texto circula (papel, tela...)."
+            ],
+            [
+              "Efemeridade",
+              "Curta duração: gêneros digitais mudam com rapidez."
+            ]
+          ],
+          "concepts": [
+            "tdic",
+            "comunicação",
+            "escrita",
+            "meios digitais",
+            "gênero digital",
+            "internetês",
+            "suporte",
+            "tela",
+            "variedade linguística",
+            "efemeridade"
+          ],
+          "facts": [
+            "A comunicação humana evoluiu da fala à escrita e, depois, aos meios digitais.",
+            "Romanos já trocavam mensagens em rede usando papiros e tábuas de cera.",
+            "O 'internetês' simplifica a escrita (ex.: 'blz', 'tbm', 'vc').",
+            "Cada gênero digital pede uma adequação de linguagem ao contexto.",
+            "A efemeridade dos gêneros exige (re)aprendizado constante das TDIC."
+          ]
+        },
+        {
+          "id": "producao-texto-4",
+          "title": "Módulo 4",
+          "subtitle": "Redes sociais e dissertação",
+          "summary": "As redes sociais ampliaram a circulação de informação e a interação, mas trouxeram questões como bolhas, fake news e o controle de dados pessoais pelas plataformas. A partir desse repertório, o módulo orienta a produção da dissertação argumentativa no modelo dos exames de seleção: tese clara, argumentos consistentes (dados, exemplos, causas e consequências) e proposta de intervenção, com coesão e norma-padrão.",
+          "keyPoints": [
+            "Redes sociais ampliam interação, mas geram bolhas e desinformação.",
+            "Dados pessoais são coletados e influenciam o comportamento dos usuários.",
+            "Dissertação argumentativa: tese + argumentos + proposta de intervenção.",
+            "Bons argumentos usam dados, exemplos e relações de causa e consequência.",
+            "Coesão, coerência e norma-padrão são exigidas no texto dissertativo."
+          ],
+          "glossary": [
+            [
+              "Dissertação argumentativa",
+              "Texto que defende uma tese com argumentos."
+            ],
+            [
+              "Tese",
+              "Ponto de vista central que o texto defende."
+            ],
+            [
+              "Proposta de intervenção",
+              "Solução apresentada na conclusão da dissertação."
+            ],
+            [
+              "Fake news",
+              "Notícia falsa divulgada como verdadeira."
+            ],
+            [
+              "Bolha",
+              "Ambiente em que se vê só o que confirma a própria opinião."
+            ]
+          ],
+          "concepts": [
+            "redes sociais",
+            "dissertação",
+            "argumentação",
+            "tese",
+            "proposta de intervenção",
+            "coesão",
+            "coerência",
+            "fake news",
+            "dados",
+            "norma-padrão"
+          ],
+          "facts": [
+            "A dissertação argumentativa é o gênero mais cobrado em vestibulares e no Enem.",
+            "A proposta de intervenção deve respeitar os direitos humanos.",
+            "Plataformas digitais lucram com a coleta e o uso de dados pessoais.",
+            "Argumentos de autoridade citam fontes confiáveis para sustentar a tese.",
+            "A repetição em 'bolhas' tende a radicalizar opiniões."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "biologia-b",
+      "title": "Biologia B",
+      "icon": "🧬",
+      "theme": "green",
+      "description": "Bioquímica: proteínas, enzimas e ácidos nucleicos.",
+      "modules": [
+        {
+          "id": "biologia-b-1",
+          "title": "Módulo 1",
+          "subtitle": "Proteínas e aminoácidos",
+          "summary": "As proteínas são polímeros formados por aminoácidos unidos por ligações peptídicas. Cada aminoácido tem um grupo amina, um grupo carboxila e um radical (R) variável. Dos 20 aminoácidos, alguns são essenciais (não produzidos pelo corpo e obtidos na dieta — 9 na espécie humana) e outros não essenciais. A sequência de aminoácidos define as estruturas primária, secundária, terciária e quaternária, das quais depende a função (estrutural, enzimática, defesa, transporte). O calor ou o pH podem causar desnaturação, com perda da forma e da função.",
+          "keyPoints": [
+            "Proteínas = polímeros de aminoácidos unidos por ligações peptídicas.",
+            "Aminoácido: grupo amina + grupo carboxila + radical R variável.",
+            "Aminoácidos essenciais (9 no ser humano) vêm da alimentação.",
+            "Estruturas: primária, secundária, terciária e quaternária.",
+            "Desnaturação: calor/pH alteram a forma e anulam a função."
+          ],
+          "glossary": [
+            [
+              "Aminoácido",
+              "Unidade que forma as proteínas."
+            ],
+            [
+              "Ligação peptídica",
+              "União entre o grupo carboxila e o grupo amina de dois aminoácidos."
+            ],
+            [
+              "Aminoácido essencial",
+              "Aquele que o organismo não sintetiza e obtém na dieta."
+            ],
+            [
+              "Desnaturação",
+              "Perda da estrutura tridimensional e da função da proteína."
+            ],
+            [
+              "Radical (R)",
+              "Parte variável que diferencia cada aminoácido."
+            ]
+          ],
+          "concepts": [
+            "proteína",
+            "aminoácido",
+            "ligação peptídica",
+            "peptídeo",
+            "essencial",
+            "desnaturação",
+            "estrutura primária",
+            "radical",
+            "polímero",
+            "função"
+          ],
+          "facts": [
+            "Existem 20 aminoácidos que combinados formam todas as proteínas.",
+            "O ser humano tem 9 aminoácidos essenciais e 11 não essenciais.",
+            "A função de uma proteína depende de sua forma tridimensional.",
+            "A desnaturação geralmente é irreversível (ex.: clara de ovo cozida).",
+            "Proteínas atuam como enzimas, anticorpos, transportadoras e estruturais."
+          ]
+        },
+        {
+          "id": "biologia-b-2",
+          "title": "Módulo 2",
+          "subtitle": "Enzimas",
+          "summary": "Enzimas são proteínas que atuam como catalisadores biológicos: aceleram reações diminuindo a energia de ativação, sem serem consumidas. Atuam com alta especificidade pelo modelo chave-fechadura, ligando-se ao substrato no sítio ativo. Sua atividade depende de temperatura e pH ótimos; fora dessas faixas, a enzima desnatura. Muitas precisam de cofatores ou coenzimas (frequentemente vitaminas) para funcionar.",
+          "keyPoints": [
+            "Enzimas são catalisadores biológicos de natureza proteica.",
+            "Diminuem a energia de ativação e não são consumidas na reação.",
+            "Especificidade: modelo chave-fechadura (enzima–substrato).",
+            "Atividade depende de temperatura e pH ótimos.",
+            "Cofatores e coenzimas (vitaminas) auxiliam a catálise."
+          ],
+          "glossary": [
+            [
+              "Enzima",
+              "Proteína que catalisa (acelera) reações biológicas."
+            ],
+            [
+              "Substrato",
+              "Molécula sobre a qual a enzima atua."
+            ],
+            [
+              "Sítio ativo",
+              "Região da enzima que se liga ao substrato."
+            ],
+            [
+              "Energia de ativação",
+              "Energia mínima para iniciar uma reação."
+            ],
+            [
+              "Coenzima",
+              "Molécula auxiliar (muitas vezes vitamina) da enzima."
+            ]
+          ],
+          "concepts": [
+            "enzima",
+            "catalisador",
+            "substrato",
+            "sítio ativo",
+            "chave-fechadura",
+            "energia de ativação",
+            "temperatura ótima",
+            "ph ótimo",
+            "coenzima",
+            "especificidade"
+          ],
+          "facts": [
+            "Enzimas terminam frequentemente no sufixo '-ase' (ex.: amilase, lipase).",
+            "Cada enzima atua sobre um substrato específico.",
+            "Acima da temperatura ótima, a enzima desnatura e perde função.",
+            "A enzima não é consumida e pode catalisar muitas reações.",
+            "Muitas vitaminas funcionam como coenzimas no metabolismo."
+          ]
+        },
+        {
+          "id": "biologia-b-3",
+          "title": "Módulo 3",
+          "subtitle": "Ácidos nucleicos",
+          "summary": "Os ácidos nucleicos — DNA e RNA — guardam e transmitem a informação genética. São polímeros de nucleotídeos, cada um formado por um fosfato, uma pentose (desoxirribose no DNA, ribose no RNA) e uma base nitrogenada. O DNA é uma dupla-hélice com bases A-T e C-G (pareamento complementar) e armazena o código; o RNA é simples-fita, usa uracila no lugar da timina e participa da síntese de proteínas (mensageiro, transportador e ribossômico).",
+          "keyPoints": [
+            "Ácidos nucleicos: DNA e RNA, polímeros de nucleotídeos.",
+            "Nucleotídeo = fosfato + pentose + base nitrogenada.",
+            "DNA: dupla-hélice; pareamento A-T e C-G.",
+            "RNA: fita simples, com uracila no lugar da timina.",
+            "RNA participa da síntese de proteínas (mensageiro, transportador, ribossômico)."
+          ],
+          "glossary": [
+            [
+              "Nucleotídeo",
+              "Unidade do ácido nucleico: fosfato + pentose + base."
+            ],
+            [
+              "DNA",
+              "Ácido desoxirribonucleico; guarda a informação genética."
+            ],
+            [
+              "RNA",
+              "Ácido ribonucleico; atua na síntese de proteínas."
+            ],
+            [
+              "Base nitrogenada",
+              "A, T, C, G (e U no RNA), que codificam a informação."
+            ],
+            [
+              "Pareamento",
+              "Ligação complementar entre bases (A-T/A-U e C-G)."
+            ]
+          ],
+          "concepts": [
+            "dna",
+            "rna",
+            "nucleotídeo",
+            "base nitrogenada",
+            "dupla-hélice",
+            "adenina",
+            "timina",
+            "uracila",
+            "pentose",
+            "código genético"
+          ],
+          "facts": [
+            "No DNA, a adenina pareia com timina e a citosina com guanina.",
+            "No RNA, a timina é substituída pela uracila.",
+            "A pentose do DNA é a desoxirribose; a do RNA é a ribose.",
+            "A estrutura em dupla-hélice foi proposta por Watson e Crick (1953).",
+            "A sequência de bases do DNA forma o código genético."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fisica-b",
+      "title": "Física B",
+      "icon": "⚖️",
+      "theme": "blue",
+      "description": "Estática: equilíbrio, momento e corpos extensos.",
+      "modules": [
+        {
+          "id": "fisica-b-1",
+          "title": "Módulo 1",
+          "subtitle": "Equilíbrio do ponto material",
+          "summary": "Um ponto material está em equilíbrio quando a resultante das forças que agem sobre ele é nula (R = 0). No equilíbrio estático ele permanece em repouso. Para resolver problemas, decompõem-se as forças nos eixos x e y e impõe-se que a soma em cada eixo seja zero. Forças concorrentes podem ser somadas pela regra do paralelogramo; casos com três forças costumam usar decomposição trigonométrica.",
+          "keyPoints": [
+            "Equilíbrio do ponto material: resultante das forças igual a zero (R = 0).",
+            "Equilíbrio estático = repouso; dinâmico = velocidade constante.",
+            "Decompõem-se as forças em x e y: ΣFx = 0 e ΣFy = 0.",
+            "Forças concorrentes somam-se pela regra do paralelogramo.",
+            "Peso, normal e tração são forças comuns nesses problemas."
+          ],
+          "glossary": [
+            [
+              "Ponto material",
+              "Corpo cujas dimensões são desprezíveis no problema."
+            ],
+            [
+              "Força resultante",
+              "Soma vetorial de todas as forças que agem no corpo."
+            ],
+            [
+              "Equilíbrio estático",
+              "Estado de repouso com resultante nula."
+            ],
+            [
+              "Decomposição",
+              "Separar uma força em componentes nos eixos x e y."
+            ],
+            [
+              "Força normal",
+              "Força de contato perpendicular à superfície."
+            ]
+          ],
+          "concepts": [
+            "equilíbrio",
+            "ponto material",
+            "força resultante",
+            "vetor",
+            "decomposição",
+            "repouso",
+            "normal",
+            "tração",
+            "peso",
+            "estática"
+          ],
+          "facts": [
+            "No equilíbrio de um ponto material a resultante das forças é nula.",
+            "Equilíbrio estático significa repouso; dinâmico, velocidade constante.",
+            "As condições ΣFx = 0 e ΣFy = 0 resolvem o equilíbrio no plano.",
+            "Forças concorrentes têm linhas de ação que se cruzam num ponto.",
+            "A regra do paralelogramo soma duas forças concorrentes."
+          ]
+        },
+        {
+          "id": "fisica-b-2",
+          "title": "Módulo 2",
+          "subtitle": "Momento (torque) de uma força",
+          "summary": "O momento (ou torque) mede a capacidade de uma força provocar rotação em torno de um eixo. É dado por M = F · b, onde b é o braço de alavanca (distância perpendicular entre a linha de ação da força e o eixo). Quando a força é oblíqua, usa-se M = F · L · sen α. O momento é horário ou anti-horário conforme o sentido de giro, sendo positivo/negativo por convenção.",
+          "keyPoints": [
+            "Momento (torque): tendência de uma força girar um corpo em torno de um eixo.",
+            "M = F · b, sendo b o braço de alavanca (distância perpendicular).",
+            "Força oblíqua: M = F · L · sen α.",
+            "O momento é horário ou anti-horário (convenção de sinais).",
+            "Unidade no SI: newton-metro (N·m)."
+          ],
+          "glossary": [
+            [
+              "Momento (torque)",
+              "Grandeza que mede o efeito de rotação de uma força."
+            ],
+            [
+              "Braço de alavanca",
+              "Distância perpendicular do eixo à linha de ação da força."
+            ],
+            [
+              "Linha de ação",
+              "Reta que contém o vetor força."
+            ],
+            [
+              "Eixo de rotação",
+              "Linha em torno da qual o corpo pode girar."
+            ],
+            [
+              "Newton-metro",
+              "Unidade de momento (N·m) no SI."
+            ]
+          ],
+          "concepts": [
+            "momento",
+            "torque",
+            "braço de alavanca",
+            "rotação",
+            "eixo",
+            "força oblíqua",
+            "horário",
+            "anti-horário",
+            "newton-metro",
+            "linha de ação"
+          ],
+          "facts": [
+            "Quanto maior o braço de alavanca, maior o momento para a mesma força.",
+            "O momento é máximo quando a força é perpendicular à barra (sen 90° = 1).",
+            "A unidade de momento no SI é o newton-metro (N·m).",
+            "Uma força cuja linha de ação passa pelo eixo tem momento nulo.",
+            "Chaves longas facilitam soltar parafusos por aumentarem o braço."
+          ]
+        },
+        {
+          "id": "fisica-b-3",
+          "title": "Módulo 3",
+          "subtitle": "Equilíbrio dos corpos extensos",
+          "summary": "Um corpo extenso está em equilíbrio quando não há translação nem rotação. Para isso, exigem-se duas condições: a resultante das forças é nula (ΣF = 0, sem translação) e a soma dos momentos em relação a qualquer eixo é nula (ΣM = 0, sem rotação). Essas condições explicam o funcionamento de gangorras, alavancas, pontes e do centro de gravidade dos corpos.",
+          "keyPoints": [
+            "Corpo extenso: tem dimensões que importam (pode transladar e girar).",
+            "1ª condição: ΣF = 0 (não há translação).",
+            "2ª condição: ΣM = 0 (não há rotação).",
+            "Aplicações: gangorra, alavancas, pontes e centro de gravidade.",
+            "Momentos horários e anti-horários se equilibram (ΣM = 0)."
+          ],
+          "glossary": [
+            [
+              "Corpo extenso",
+              "Corpo cujas dimensões não podem ser desprezadas."
+            ],
+            [
+              "Translação",
+              "Movimento em que todos os pontos se deslocam igualmente."
+            ],
+            [
+              "Rotação",
+              "Giro do corpo em torno de um eixo."
+            ],
+            [
+              "Centro de gravidade",
+              "Ponto onde se considera aplicado o peso do corpo."
+            ],
+            [
+              "Alavanca",
+              "Máquina simples que amplia força usando um apoio."
+            ]
+          ],
+          "concepts": [
+            "corpo extenso",
+            "equilíbrio",
+            "translação",
+            "rotação",
+            "momento",
+            "centro de gravidade",
+            "alavanca",
+            "gangorra",
+            "apoio",
+            "estática"
+          ],
+          "facts": [
+            "O equilíbrio de um corpo extenso exige ΣF = 0 e ΣM = 0.",
+            "Numa gangorra equilibrada, os momentos dos dois lados se igualam.",
+            "Alavancas multiplicam força ao custo de deslocamento.",
+            "O centro de gravidade influencia a estabilidade do corpo.",
+            "Um corpo pode ter resultante nula e ainda girar se ΣM ≠ 0."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quimica-b",
+      "title": "Química B",
+      "icon": "⚗️",
+      "theme": "yellow",
+      "description": "Substâncias, misturas e métodos de separação.",
+      "modules": [
+        {
+          "id": "quimica-b-1",
+          "title": "Módulo 1",
+          "subtitle": "Substâncias e misturas",
+          "summary": "A matéria pode ser substância pura (composição fixa: substância simples, formada por um elemento, ou composta, por mais de um) ou mistura (dois ou mais componentes). Misturas homogêneas têm uma só fase (soluções, como sal em água); heterogêneas têm duas ou mais fases (água e areia). Misturas especiais, como ligas e o ar, e os pontos de fusão/ebulição ajudam a distinguir substâncias de misturas.",
+          "keyPoints": [
+            "Substância pura: composição fixa (simples ou composta).",
+            "Mistura: dois ou mais componentes em proporções variáveis.",
+            "Homogênea: uma única fase (solução).",
+            "Heterogênea: duas ou mais fases.",
+            "Pontos de fusão/ebulição constantes indicam substância pura."
+          ],
+          "glossary": [
+            [
+              "Substância pura",
+              "Material de composição e propriedades fixas."
+            ],
+            [
+              "Mistura",
+              "União de duas ou mais substâncias."
+            ],
+            [
+              "Fase",
+              "Porção homogênea e uniforme de um sistema."
+            ],
+            [
+              "Mistura homogênea",
+              "Apresenta uma única fase (solução)."
+            ],
+            [
+              "Mistura heterogênea",
+              "Apresenta duas ou mais fases."
+            ]
+          ],
+          "concepts": [
+            "substância pura",
+            "mistura",
+            "homogênea",
+            "heterogênea",
+            "fase",
+            "solução",
+            "substância simples",
+            "substância composta",
+            "componente",
+            "liga"
+          ],
+          "facts": [
+            "Substâncias puras têm pontos de fusão e ebulição constantes.",
+            "Uma solução é uma mistura homogênea (uma só fase).",
+            "Água e óleo formam uma mistura heterogênea (duas fases).",
+            "O ar atmosférico é uma mistura homogênea de gases.",
+            "Ligas metálicas, como o bronze, são misturas de metais."
+          ]
+        },
+        {
+          "id": "quimica-b-2",
+          "title": "Módulo 2",
+          "subtitle": "Separação de misturas",
+          "summary": "Separar misturas significa isolar seus componentes usando diferenças de propriedades. Para misturas heterogêneas: filtração (sólido + líquido), decantação (líquidos imiscíveis ou sólido que deposita), centrifugação e peneiração. Para misturas homogêneas: destilação simples (sólido dissolvido em líquido) e evaporação. A escolha do método depende do estado físico e das propriedades (densidade, solubilidade, temperatura de ebulição).",
+          "keyPoints": [
+            "Separar misturas explora diferenças de propriedades dos componentes.",
+            "Heterogêneas: filtração, decantação, centrifugação, peneiração.",
+            "Homogêneas: destilação simples e evaporação.",
+            "Decantação separa por diferença de densidade.",
+            "A escolha do método depende do estado físico e das propriedades."
+          ],
+          "glossary": [
+            [
+              "Filtração",
+              "Separa sólido de líquido (ou gás) com um filtro."
+            ],
+            [
+              "Decantação",
+              "Separa por diferença de densidade, deixando depositar."
+            ],
+            [
+              "Destilação simples",
+              "Separa sólido dissolvido evaporando e condensando o líquido."
+            ],
+            [
+              "Centrifugação",
+              "Acelera a decantação por rotação rápida."
+            ],
+            [
+              "Solubilidade",
+              "Capacidade de uma substância dissolver-se em outra."
+            ]
+          ],
+          "concepts": [
+            "separação",
+            "filtração",
+            "decantação",
+            "destilação",
+            "evaporação",
+            "centrifugação",
+            "peneiração",
+            "densidade",
+            "solubilidade",
+            "mistura"
+          ],
+          "facts": [
+            "A filtração retém o sólido e deixa passar o líquido (filtrado).",
+            "A decantação aproveita a diferença de densidade entre os componentes.",
+            "A destilação simples separa o sal dissolvido da água.",
+            "O tratamento de água usa decantação e filtração.",
+            "A centrifugação é uma decantação acelerada por rotação."
+          ]
+        },
+        {
+          "id": "quimica-b-3",
+          "title": "Módulo 3",
+          "subtitle": "Destilação fracionada e petróleo",
+          "summary": "A destilação fracionada separa líquidos miscíveis com diferentes temperaturas de ebulição, usando uma coluna de fracionamento que permite vaporizar e condensar os componentes em etapas. É a base do refino do petróleo: na torre de fracionamento, as frações mais voláteis (gases, gasolina) saem no topo e as menos voláteis (óleo diesel, lubrificantes, asfalto) na base. Também separa, por exemplo, benzeno e tolueno.",
+          "keyPoints": [
+            "Destilação fracionada separa líquidos miscíveis com ebulições diferentes.",
+            "A coluna de fracionamento separa por etapas de vaporização/condensação.",
+            "Refino do petróleo: frações leves no topo, pesadas na base.",
+            "Frações: gases, gasolina, querosene, diesel, lubrificantes, asfalto.",
+            "Permite separar misturas como benzeno e tolueno."
+          ],
+          "glossary": [
+            [
+              "Destilação fracionada",
+              "Separa líquidos miscíveis por diferença de ebulição."
+            ],
+            [
+              "Coluna de fracionamento",
+              "Dispositivo que separa os vapores em etapas."
+            ],
+            [
+              "Fração",
+              "Conjunto de componentes separados na destilação do petróleo."
+            ],
+            [
+              "Volatilidade",
+              "Facilidade de uma substância evaporar."
+            ],
+            [
+              "Condensação",
+              "Passagem do vapor ao estado líquido."
+            ]
+          ],
+          "concepts": [
+            "destilação fracionada",
+            "coluna de fracionamento",
+            "petróleo",
+            "refino",
+            "fração",
+            "volatilidade",
+            "ebulição",
+            "condensação",
+            "gasolina",
+            "miscível"
+          ],
+          "facts": [
+            "A destilação fracionada separa benzeno (T.E. 80 °C) e tolueno (T.E. 110 °C).",
+            "No refino, as frações leves saem no topo da torre.",
+            "Gasolina, querosene, diesel e asfalto são frações do petróleo.",
+            "Quanto mais volátil a fração, mais alto ela sai na coluna.",
+            "A coluna de fracionamento melhora a separação de líquidos miscíveis."
+          ]
+        }
+      ]
+    }
+  ];
+  SUBJECTS = SUBJECTS.concat(SUBJECTS_NOVAS);
+
   var SUBJECT_ICONS = {
     quimica: '<svg viewBox="0 0 64 64"><path d="M25 14h14M29 14v13L17 48a5 5 0 0 0 4 8h22a5 5 0 0 0 4-8L35 27V14"/><path d="M22 45h20"/></svg>',
     portugues: '<svg viewBox="0 0 64 64"><path d="M16 16h20a8 8 0 0 1 8 8v26H24a8 8 0 0 1-8-8V16Z"/><path d="M26 28h15M26 36h12"/></svg>',
@@ -2896,7 +3705,16 @@
   };
   var DEFAULT_ICON = '<svg viewBox="0 0 64 64"><path d="M18 14h21l7 7v29H18V14Z"/><path d="M39 14v8h7M24 30h16M24 38h16M24 46h10"/></svg>';
 
-  function iconFor(id) { return SUBJECT_ICONS[id] || DEFAULT_ICON; }
+  // Reaproveita o ícone da base quando a variante "-b" não tem o seu (ex.: fisica-b → fisica).
+  function iconFor(id) { return SUBJECT_ICONS[id] || SUBJECT_ICONS[id.replace(/-b$/, "")] || DEFAULT_ICON; }
+
+  // Matérias que JÁ existiam antes desta atualização = caem em PROVA (recebem badge).
+  // As novas (puxadas de modulos.md) não recebem destaque.
+  var EXAM_IDS = {
+    quimica: 1, portugues: 1, fisica: 1, circuitos: 1, calculadoras: 1, logica: 1,
+    ingles: 1, "matematica-a": 1, "matematica-b": 1, arte: 1, biologia: 1, geografia: 1, historia: 1
+  };
+  function isExam(id) { return !!EXAM_IDS[id]; }
 
   /* ----------------------------------------------------------------- *
    * 1b) PONTE COM A NUVEM (KickHub.db) — sem que a VIEW saiba dela.    *
@@ -3004,6 +3822,11 @@
           { title: subject.title, subtitle: subject.description, theme: subject.theme, icon: iconFor(subject.id) },
           function () { showSubject(subject.id); }
         );
+        // Destaque visual das matérias de prova.
+        if (isExam(subject.id)) {
+          card.classList.add("kh-card--exam");
+          card.appendChild(el("span", { class: "kh-card__badge", text: "Prova" }));
+        }
         row.appendChild(card);
       });
       host.replaceChildren(el("div", { class: "kh-view--menu" }, row));
