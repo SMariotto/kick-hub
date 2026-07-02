@@ -65,11 +65,11 @@ create table if not exists public.calendar_events (
   deleted_at  timestamptz
 );
 
--- ---------- App Pelada (futebol + sorteador de times) ----------
+-- ---------- App Pelada (Pelada Hub: futebol + sorteador) ----------
 create table if not exists public.pelada_players (
   id          text primary key,
   name        text not null,
-  position    text,                       -- goleiro | zagueiro | meia | atacante
+  position    text,                       -- depende da modalidade (Futsal/Society/Campo)
   rating      int  default 3,             -- 1 a 5
   status      text default 'convidado',   -- mensalista | convidado
   active      boolean default true,
@@ -81,15 +81,24 @@ create table if not exists public.pelada_players (
 create table if not exists public.pelada_history (
   id          text primary key,
   date        date not null,
-  team_a      jsonb default '[]'::jsonb,   -- array de ids de jogadores
+  modality    text default 'society',      -- futsal | society | campo
+  team_a      jsonb default '[]'::jsonb,    -- array de ids de jogadores
   team_b      jsonb default '[]'::jsonb,
+  name_a      text default 'Time Colete',
+  name_b      text default 'Time Sem Colete',
   score_a     int  default 0,
   score_b     int  default 0,
-  stats       jsonb default '{}'::jsonb,   -- { artilheiro, garcom }
+  scorers     jsonb default '[]'::jsonb,    -- [{ id, goals }]
   order_index int  default 0,
   updated_at  timestamptz not null default now(),
   deleted_at  timestamptz
 );
+
+-- Migração leve caso a tabela já exista de uma versão anterior:
+alter table public.pelada_history add column if not exists modality text default 'society';
+alter table public.pelada_history add column if not exists name_a   text default 'Time Colete';
+alter table public.pelada_history add column if not exists name_b   text default 'Time Sem Colete';
+alter table public.pelada_history add column if not exists scorers  jsonb default '[]'::jsonb;
 
 create index if not exists idx_modules_subject on public.modules(subject_id);
 create index if not exists idx_events_date     on public.calendar_events(date);
