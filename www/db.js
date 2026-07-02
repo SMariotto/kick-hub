@@ -70,7 +70,9 @@
         var t = d.transaction(store, mode);
         var s = t.objectStore(store);
         var out = fn(s);
-        t.oncomplete = function () { resolve(out && out.result !== undefined ? out.result : out); };
+        // fn devolve um IDBRequest; resolvemos com seu .result (undefined
+        // quando a chave não existe — get/getAll; ignorado em put/delete).
+        t.oncomplete = function () { resolve(out ? out.result : undefined); };
         t.onerror = function () { reject(t.error); };
         t.onabort = function () { reject(t.error); };
       });

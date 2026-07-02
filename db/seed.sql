@@ -213,3 +213,32 @@ on conflict (id) do update set subject_id=excluded.subject_id, title=excluded.ti
 insert into public.modules (id,subject_id,title,subtitle,summary,key_points,glossary,concepts,facts,order_index) values ('quimica-b-3','quimica-b','Módulo 3','Destilação fracionada e petróleo','A destilação fracionada separa líquidos miscíveis com diferentes temperaturas de ebulição, usando uma coluna de fracionamento que permite vaporizar e condensar os componentes em etapas. É a base do refino do petróleo: na torre de fracionamento, as frações mais voláteis (gases, gasolina) saem no topo e as menos voláteis (óleo diesel, lubrificantes, asfalto) na base. Também separa, por exemplo, benzeno e tolueno.','["Destilação fracionada separa líquidos miscíveis com ebulições diferentes.","A coluna de fracionamento separa por etapas de vaporização/condensação.","Refino do petróleo: frações leves no topo, pesadas na base.","Frações: gases, gasolina, querosene, diesel, lubrificantes, asfalto.","Permite separar misturas como benzeno e tolueno."]'::jsonb,'[["Destilação fracionada","Separa líquidos miscíveis por diferença de ebulição."],["Coluna de fracionamento","Dispositivo que separa os vapores em etapas."],["Fração","Conjunto de componentes separados na destilação do petróleo."],["Volatilidade","Facilidade de uma substância evaporar."],["Condensação","Passagem do vapor ao estado líquido."]]'::jsonb,'["destilação fracionada","coluna de fracionamento","petróleo","refino","fração","volatilidade","ebulição","condensação","gasolina","miscível"]'::jsonb,'["A destilação fracionada separa benzeno (T.E. 80 °C) e tolueno (T.E. 110 °C).","No refino, as frações leves saem no topo da torre.","Gasolina, querosene, diesel e asfalto são frações do petróleo.","Quanto mais volátil a fração, mais alto ela sai na coluna.","A coluna de fracionamento melhora a separação de líquidos miscíveis."]'::jsonb,20)
 on conflict (id) do update set subject_id=excluded.subject_id, title=excluded.title, subtitle=excluded.subtitle, summary=excluded.summary, key_points=excluded.key_points, glossary=excluded.glossary, concepts=excluded.concepts, facts=excluded.facts, order_index=excluded.order_index, deleted_at=null;
 commit;
+
+
+-- ===== App Pelada: jogadores fake (seed inicial) =====
+begin;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-ana','Ana Goleira','goleiro',4,'mensalista',true,1)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-bruno','Bruno Paredão','goleiro',3,'convidado',true,2)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-caio','Caio Canhão','atacante',5,'mensalista',true,3)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-diego','Diego Drible','meia',4,'mensalista',true,4)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-edu','Edu Muralha','zagueiro',3,'mensalista',true,5)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-fabio','Fábio Foguete','atacante',4,'convidado',true,6)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-gabi','Gabi Maestro','meia',5,'mensalista',true,7)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-hugo','Hugo Xerife','zagueiro',2,'convidado',true,8)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-igor','Igor Veloz','meia',3,'mensalista',true,9)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-joao','João Trator','zagueiro',3,'convidado',true,10)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-leo','Léo Artilheiro','atacante',4,'mensalista',true,11)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+insert into public.pelada_players (id,name,position,rating,status,active,order_index) values ('pl-miguel','Miguel Pipoca','meia',2,'convidado',true,12)
+on conflict (id) do update set name=excluded.name, position=excluded.position, rating=excluded.rating, status=excluded.status, active=excluded.active, order_index=excluded.order_index, deleted_at=null;
+commit;
