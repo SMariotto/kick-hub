@@ -566,6 +566,76 @@ body.kh-dark .kh-day-event__time { background: rgba(10, 163, 255, .2); color: #9
 .kh-day-event__actions { margin-top: .6rem; }
 .kh-day-event__actions .kh-btn { width: 100%; }
 
+/* ----------------------------- Pelada Hub ------------------------- */
+.kh-pel { width: 100%; max-width: 640px; margin-inline: auto; }
+.kh-pel__head { margin-bottom: .4rem; }
+.kh-pel__title { font-size: clamp(1.2rem, 4vw, 1.5rem); font-weight: 900; }
+.kh-pel__content { display: flex; flex-direction: column; gap: .7rem; }
+
+.kh-btn--sm { padding: .5rem .7rem; font-size: .82rem; border-radius: 9px; }
+.kh-btn--ghost { background: var(--kh-white); color: var(--kh-ink); border: 1px solid var(--kh-line); }
+
+.kh-field { display: grid; gap: .3rem; }
+.kh-field small { color: var(--kh-ink-soft); font-weight: 800; font-size: .74rem; }
+.kh-select { width: 100%; text-align: left; letter-spacing: normal; cursor: pointer; }
+
+.kh-pel__toolbar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.kh-pel__count { font-weight: 900; color: var(--kh-green); }
+.kh-pel__toolbar-actions { display: flex; align-items: center; gap: .6rem; }
+
+.kh-pel__list { display: grid; gap: .45rem; }
+.kh-pel__player {
+  display: flex; align-items: center; gap: .7rem;
+  background: var(--kh-white); border: 1px solid var(--kh-line);
+  border-radius: 12px; padding: .55rem .7rem; cursor: pointer;
+  transition: border-color var(--kh-speed) var(--kh-ease), background var(--kh-speed) var(--kh-ease);
+}
+.kh-pel__player.is-on { border-color: var(--kh-green); background: rgba(24, 160, 88, .08); }
+.kh-pel__avatar {
+  width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(150deg, #8de7a9, #18a058); color: #fff;
+  font-weight: 900; font-size: .82rem;
+}
+.kh-pel__avatar--sm { width: 28px; height: 28px; font-size: .7rem; }
+.kh-pel__info { flex: 1 1 auto; min-width: 0; display: grid; }
+.kh-pel__info strong { font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kh-pel__info small { color: var(--kh-ink-soft); font-size: .74rem; font-weight: 700; }
+.kh-pel__stars { color: var(--kh-yellow); font-size: .85rem; letter-spacing: -1px; flex: 0 0 auto; }
+.kh-pel__stars--sm { font-size: .72rem; }
+.kh-pel__check { width: 22px; height: 22px; accent-color: var(--kh-green); flex: 0 0 auto; }
+
+.kh-pel__draw-ctrl { display: flex; align-items: flex-end; gap: .7rem; flex-wrap: wrap; }
+.kh-pel__draw-ctrl .kh-field { flex: 1 1 140px; }
+.kh-pel__teams { display: grid; gap: .7rem; grid-template-columns: 1fr; }
+@media (min-width: 520px) { .kh-pel__teams { grid-template-columns: 1fr 1fr; } }
+.kh-pel__team { border: 1px solid var(--kh-line); border-radius: 14px; padding: .8rem; background: var(--kh-white); }
+.kh-pel__team--a { box-shadow: inset 0 0 0 2px rgba(10, 163, 255, .35); }
+.kh-pel__team--b { box-shadow: inset 0 0 0 2px rgba(43, 46, 51, .28); }
+.kh-pel__team-head { display: flex; align-items: baseline; justify-content: space-between; gap: .4rem; margin-bottom: .5rem; }
+.kh-pel__team-head strong { font-size: .95rem; font-weight: 900; }
+.kh-pel__team-avg { font-size: .72rem; font-weight: 800; color: var(--kh-ink-soft); white-space: nowrap; }
+.kh-pel__team-list { display: grid; gap: .4rem; }
+.kh-pel__team-player { display: flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 700; }
+.kh-pel__team-player > span:nth-child(2) { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kh-pel__bench { grid-column: 1 / -1; background: var(--kh-bg); border-radius: 12px; padding: .6rem .8rem; display: grid; gap: .2rem; }
+.kh-pel__bench strong { font-size: .8rem; } .kh-pel__bench span { color: var(--kh-ink-soft); font-size: .8rem; font-weight: 600; }
+
+.kh-pel__timer { display: flex; align-items: center; justify-content: space-between; gap: .6rem; background: var(--kh-white); border: 1px solid var(--kh-line); border-radius: 14px; padding: .7rem .9rem; flex-wrap: wrap; }
+.kh-pel__time { font-size: clamp(1.8rem, 8vw, 2.4rem); font-weight: 900; font-variant-numeric: tabular-nums; }
+.kh-pel__timer-btns { display: flex; align-items: center; gap: .5rem; }
+.kh-pel__board { display: flex; align-items: center; justify-content: center; gap: clamp(.6rem, 3vw, 1.4rem); }
+.kh-pel__board-side { display: grid; justify-items: center; gap: .3rem; }
+.kh-pel__board-side small { font-weight: 800; color: var(--kh-ink-soft); }
+.kh-pel__board-x { font-size: 1.4rem; font-weight: 900; color: var(--kh-ink-soft); }
+.kh-pel__score { font-size: clamp(2rem, 10vw, 3rem); font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; }
+.kh-pel__score-btns { display: flex; gap: .4rem; }
+.kh-pel__score-btns .kh-btn { min-width: 42px; }
+.kh-pel__history { display: grid; gap: .35rem; margin-top: .4rem; }
+.kh-pel__history strong { font-size: .9rem; }
+.kh-pel__history-row { display: flex; align-items: center; justify-content: space-between; background: var(--kh-white); border: 1px solid var(--kh-line); border-radius: 10px; padding: .5rem .7rem; font-size: .85rem; }
+.kh-pel__muted { color: var(--kh-ink-soft); font-weight: 600; }
+
 /* --------------------- Acessibilidade / movimento ----------------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

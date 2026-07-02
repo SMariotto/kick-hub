@@ -65,8 +65,35 @@ create table if not exists public.calendar_events (
   deleted_at  timestamptz
 );
 
+-- ---------- App Pelada (futebol + sorteador de times) ----------
+create table if not exists public.pelada_players (
+  id          text primary key,
+  name        text not null,
+  position    text,                       -- goleiro | zagueiro | meia | atacante
+  rating      int  default 3,             -- 1 a 5
+  status      text default 'convidado',   -- mensalista | convidado
+  active      boolean default true,
+  order_index int  default 0,
+  updated_at  timestamptz not null default now(),
+  deleted_at  timestamptz
+);
+
+create table if not exists public.pelada_history (
+  id          text primary key,
+  date        date not null,
+  team_a      jsonb default '[]'::jsonb,   -- array de ids de jogadores
+  team_b      jsonb default '[]'::jsonb,
+  score_a     int  default 0,
+  score_b     int  default 0,
+  stats       jsonb default '{}'::jsonb,   -- { artilheiro, garcom }
+  order_index int  default 0,
+  updated_at  timestamptz not null default now(),
+  deleted_at  timestamptz
+);
+
 create index if not exists idx_modules_subject on public.modules(subject_id);
 create index if not exists idx_events_date     on public.calendar_events(date);
+create index if not exists idx_pelada_hist_date on public.pelada_history(date);
 
 -- ---------- updated_at automático ----------
 create or replace function public.touch_updated_at()
@@ -80,7 +107,7 @@ $$;
 do $$
 declare t text;
 begin
-  foreach t in array array['subjects','modules','works','calendar_events'] loop
+  foreach t in array array['subjects','modules','works','calendar_events','pelada_players','pelada_history'] loop
     execute format('drop trigger if exists trg_touch_%1$s on public.%1$s;', t);
     execute format(
       'create trigger trg_touch_%1$s before update on public.%1$s
@@ -93,12 +120,14 @@ alter table public.subjects        enable row level security;
 alter table public.modules         enable row level security;
 alter table public.works           enable row level security;
 alter table public.calendar_events enable row level security;
+alter table public.pelada_players  enable row level security;
+alter table public.pelada_history  enable row level security;
 
 -- Recria as políticas de forma idempotente.
 do $$
 declare t text;
 begin
-  foreach t in array array['subjects','modules','works','calendar_events'] loop
+  foreach t in array array['subjects','modules','works','calendar_events','pelada_players','pelada_history'] loop
     execute format('drop policy if exists "%1$s_authenticated_all" on public.%1$s;', t);
     -- Acesso TOTAL apenas para autenticados; anônimo é negado por padrão.
     execute format(
