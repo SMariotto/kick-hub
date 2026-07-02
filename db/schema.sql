@@ -86,9 +86,11 @@ create table if not exists public.pelada_history (
   team_b      jsonb default '[]'::jsonb,
   name_a      text default 'Time Colete',
   name_b      text default 'Time Sem Colete',
-  score_a     int  default 0,
+  score_a     int  default 0,             -- (legado, 2 times) — mantido p/ compat
   score_b     int  default 0,
-  scorers     jsonb default '[]'::jsonb,    -- [{ id, goals }]
+  teams       jsonb default '[]'::jsonb,   -- [{ name, players:[ids], positions:{id:pos} }] — N times
+  scores      jsonb default '[]'::jsonb,   -- [int, int, ...] alinhado a teams
+  scorers     jsonb default '[]'::jsonb,   -- [{ id, goals }]
   order_index int  default 0,
   updated_at  timestamptz not null default now(),
   deleted_at  timestamptz
@@ -99,6 +101,8 @@ alter table public.pelada_history add column if not exists modality text default
 alter table public.pelada_history add column if not exists name_a   text default 'Time Colete';
 alter table public.pelada_history add column if not exists name_b   text default 'Time Sem Colete';
 alter table public.pelada_history add column if not exists scorers  jsonb default '[]'::jsonb;
+alter table public.pelada_history add column if not exists teams    jsonb default '[]'::jsonb;
+alter table public.pelada_history add column if not exists scores   jsonb default '[]'::jsonb;
 
 create index if not exists idx_modules_subject on public.modules(subject_id);
 create index if not exists idx_events_date     on public.calendar_events(date);
